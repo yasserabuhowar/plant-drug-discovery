@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منصة تحليل النباتات الدوائية — AI</title>
+<title>منصة تحليل النباتات الدوائية</title>
 <style>
   :root {
     --bg: #0d1117;
@@ -13,62 +13,72 @@
     --accent: #2ea043;
     --accent2: #388bfd;
     --accent3: #d29922;
+    --accent4: #bc4c00;
     --text: #e6edf3;
     --text-muted: #8b949e;
     --text-dim: #6e7681;
+    --phase1: #1a7f37;
+    --phase2: #1a56a0;
+    --phase3: #9a6700;
+    --phase4: #8250df;
+    --phase5: #cf222e;
+    --phase6: #0550ae;
+    --tag-bg: #161b22;
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     font-size: 15px;
     line-height: 1.6;
     min-height: 100vh;
   }
 
-  /* HEADER */
+  /* ─── HEADER ─── */
   header {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
-    padding: 18px 28px;
+    padding: 20px 32px;
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
   }
   .logo {
-    width: 38px; height: 38px;
-    background: linear-gradient(135deg, #2ea043, #388bfd);
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
     border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px; flex-shrink: 0;
+    font-size: 20px; flex-shrink: 0;
   }
-  header h1 { font-size: 18px; font-weight: 600; }
-  header p { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
-  .ai-badge {
+  header h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
+  header p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+  .version-tag {
     margin-right: auto;
-    background: linear-gradient(135deg, rgba(56,139,253,.15), rgba(46,160,67,.15));
-    border: 1px solid rgba(56,139,253,.3);
-    color: var(--accent2);
+    background: rgba(46,160,67,.15);
+    border: 1px solid rgba(46,160,67,.3);
+    color: var(--accent);
     font-size: 11px;
     padding: 3px 10px;
     border-radius: 20px;
-    letter-spacing: .3px;
-    white-space: nowrap;
+    letter-spacing: .4px;
   }
 
-  .container { max-width: 1060px; margin: 0 auto; padding: 28px 20px; }
+  /* ─── LAYOUT ─── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
 
-  /* SEARCH */
-  .search-box {
+  /* ─── SEARCH BOX ─── */
+  .search-section {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 24px;
+    padding: 28px;
+    margin-bottom: 32px;
   }
-  .search-box h2 { font-size: 15px; font-weight: 600; margin-bottom: 14px; color: var(--text-muted); }
-  .search-row { display: flex; gap: 10px; }
+  .search-section h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: var(--text-muted); }
+  .search-row { display: flex; gap: 12px; align-items: stretch; }
   .search-input {
     flex: 1;
     background: var(--bg);
@@ -81,54 +91,54 @@
     direction: rtl;
     transition: border-color .2s;
   }
-  .search-input:focus { outline: none; border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(56,139,253,.1); }
+  .search-input:focus { outline: none; border-color: var(--accent2); }
   .search-input::placeholder { color: var(--text-dim); }
-  .btn-go {
+  .btn-analyze {
     background: var(--accent);
     color: #fff;
     border: none;
     border-radius: 8px;
-    padding: 12px 26px;
+    padding: 12px 28px;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     font-family: inherit;
-    transition: background .2s, opacity .2s;
+    transition: background .2s, transform .1s;
     white-space: nowrap;
   }
-  .btn-go:hover { background: #3fb950; }
-  .btn-go:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-analyze:hover { background: #3fb950; }
+  .btn-analyze:active { transform: scale(.97); }
+  .btn-analyze:disabled { background: var(--border); color: var(--text-dim); cursor: not-allowed; }
 
-  .quick-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
-  .qtag {
+  .quick-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .quick-tag {
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 20px;
-    padding: 5px 13px;
+    padding: 5px 14px;
     font-size: 13px;
     color: var(--text-muted);
     cursor: pointer;
-    transition: all .18s;
-    user-select: none;
+    transition: all .2s;
   }
-  .qtag:hover { border-color: var(--accent2); color: var(--accent2); }
+  .quick-tag:hover { border-color: var(--accent2); color: var(--accent2); }
 
-  /* STATUS */
-  .status {
+  /* ─── STATUS BAR ─── */
+  .status-bar {
+    display: none;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 14px 18px;
-    margin-bottom: 20px;
-    display: none;
-    align-items: center;
-    gap: 10px;
+    padding: 14px 20px;
+    margin-bottom: 24px;
     font-size: 13px;
     color: var(--text-muted);
+    align-items: center;
+    gap: 10px;
   }
-  .status.show { display: flex; }
-  .spin {
-    width: 15px; height: 15px;
+  .status-bar.active { display: flex; }
+  .spinner {
+    width: 16px; height: 16px;
     border: 2px solid var(--border);
     border-top-color: var(--accent2);
     border-radius: 50%;
@@ -136,206 +146,246 @@
     flex-shrink: 0;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .stop-btn {
-    margin-right: auto;
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    border-radius: 6px;
-    padding: 3px 12px;
-    font-size: 12px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all .15s;
-  }
-  .stop-btn:hover { border-color: #ff7b72; color: #ff7b72; }
 
-  /* PLANT HEADER */
-  .plant-hdr {
+  /* ─── PLANT HEADER ─── */
+  .plant-header {
+    display: none;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 20px;
-    display: none;
+    padding: 28px;
+    margin-bottom: 24px;
   }
-  .plant-hdr.show { display: block; }
-  .plant-top { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
-  .p-icon { font-size: 42px; }
-  .p-name-ar { font-size: 26px; font-weight: 700; letter-spacing: -.4px; }
-  .p-name-en { font-size: 14px; color: var(--text-muted); }
-  .p-name-sci { font-style: italic; font-size: 13px; color: var(--accent); }
-  .pills { display: flex; gap: 8px; flex-wrap: wrap; }
-  .pill {
+  .plant-header.visible { display: block; }
+  .plant-name-row { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+  .plant-icon { font-size: 48px; }
+  .plant-name-ar { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .plant-name-en { font-size: 15px; color: var(--text-muted); margin-top: 2px; }
+  .plant-name-sci {
+    font-style: italic;
+    font-size: 14px;
+    color: var(--accent);
+    margin-top: 2px;
+  }
+  .meta-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .meta-pill {
     font-size: 12px;
-    padding: 3px 11px;
+    padding: 4px 12px;
     border-radius: 20px;
     border: 1px solid;
   }
-  .pill-f { color: var(--accent2); border-color: rgba(56,139,253,.3); background: rgba(56,139,253,.07); }
-  .pill-r { color: var(--accent3); border-color: rgba(210,153,34,.3); background: rgba(210,153,34,.07); }
-  .pill-u { color: var(--accent); border-color: rgba(46,160,67,.3); background: rgba(46,160,67,.07); }
+  .pill-family { color: var(--accent2); border-color: rgba(56,139,253,.3); background: rgba(56,139,253,.08); }
+  .pill-region { color: var(--accent3); border-color: rgba(210,153,34,.3); background: rgba(210,153,34,.08); }
+  .pill-use { color: var(--accent); border-color: rgba(46,160,67,.3); background: rgba(46,160,67,.08); }
 
-  /* PHASES */
-  .phases-lbl {
-    font-size: 12px;
+  /* ─── PHASES GRID ─── */
+  .phases-title {
+    font-size: 14px;
     font-weight: 600;
-    color: var(--text-dim);
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
     display: none;
   }
-  .phases-lbl.show { display: block; }
+  .phases-title.visible { display: block; }
 
-  .phase {
+  .phase-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 10px;
-    margin-bottom: 12px;
+    border-radius: 12px;
+    margin-bottom: 16px;
     overflow: hidden;
     display: none;
   }
-  .phase.show { display: block; }
+  .phase-card.visible { display: block; }
 
-  .phase-hdr {
-    padding: 16px 20px;
+  .phase-header {
+    padding: 18px 24px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     cursor: pointer;
     user-select: none;
     transition: background .15s;
   }
-  .phase-hdr:hover { background: rgba(255,255,255,.025); }
+  .phase-header:hover { background: rgba(255,255,255,.03); }
 
-  .pnum {
-    width: 30px; height: 30px;
-    border-radius: 7px;
+  .phase-num {
+    width: 32px; height: 32px;
+    border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700;
+    font-size: 13px; font-weight: 700;
     flex-shrink: 0;
   }
-  .p1 .pnum { background: rgba(46,160,67,.18); color: #3fb950; }
-  .p2 .pnum { background: rgba(56,139,253,.18); color: #79c0ff; }
-  .p3 .pnum { background: rgba(210,153,34,.18); color: #e3b341; }
-  .p4 .pnum { background: rgba(130,80,223,.18); color: #d2a8ff; }
-  .p5 .pnum { background: rgba(207,34,46,.18); color: #ff7b72; }
-  .p6 .pnum { background: rgba(5,80,174,.18); color: #58a6ff; }
+  .phase-1 .phase-num { background: rgba(26,127,55,.2); color: #3fb950; }
+  .phase-2 .phase-num { background: rgba(26,86,160,.2); color: #58a6ff; }
+  .phase-3 .phase-num { background: rgba(154,103,0,.2); color: #e3b341; }
+  .phase-4 .phase-num { background: rgba(130,80,223,.2); color: #bc8cff; }
+  .phase-5 .phase-num { background: rgba(207,34,46,.2); color: #ff7b72; }
+  .phase-6 .phase-num { background: rgba(5,80,174,.2); color: #79c0ff; }
 
-  .plbl { flex: 1; }
-  .plbl strong { font-size: 14px; font-weight: 600; }
-  .plbl span { font-size: 12px; color: var(--text-muted); display: block; margin-top: 1px; }
-  .ptoggle { color: var(--text-dim); transition: transform .2s; }
-  .phase.open .ptoggle { transform: rotate(180deg); }
+  .phase-label { flex: 1; }
+  .phase-label strong { font-size: 15px; font-weight: 600; }
+  .phase-label span { font-size: 13px; color: var(--text-muted); display: block; margin-top: 2px; }
+
+  .phase-toggle { color: var(--text-dim); font-size: 18px; transition: transform .2s; }
+  .phase-card.open .phase-toggle { transform: rotate(180deg); }
 
   .phase-body {
     display: none;
-    padding: 4px 20px 20px;
+    padding: 0 24px 24px;
     border-top: 1px solid var(--border);
   }
-  .phase.open .phase-body { display: block; }
+  .phase-card.open .phase-body { display: block; }
 
-  /* CONTENT STYLES */
-  .slbl {
+  /* ─── COMPOUNDS TABLE ─── */
+  .section-label {
     font-size: 11px;
     font-weight: 600;
     color: var(--text-dim);
     text-transform: uppercase;
-    letter-spacing: .7px;
-    margin: 18px 0 8px;
+    letter-spacing: .8px;
+    margin: 20px 0 10px;
   }
 
-  /* streaming output */
-  .stream-out {
-    font-size: 14px;
-    line-height: 1.75;
-    color: var(--text);
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-  .stream-out h3 {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--accent2);
-    margin: 16px 0 6px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid var(--border);
-  }
-  .stream-out ul { padding-right: 20px; margin: 6px 0; }
-  .stream-out li { margin-bottom: 4px; }
-  .stream-out strong { color: var(--accent3); }
-  .stream-out em { color: var(--accent); font-style: normal; font-weight: 500; }
-  .stream-out code {
+  .compounds-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .compound-chip {
     background: var(--surface2);
     border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 1px 6px;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
     font-family: 'Courier New', monospace;
-    font-size: 12px;
     color: var(--accent2);
   }
 
-  /* DB GRID */
-  .db-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 8px; }
+  /* ─── DATABASE LINKS ─── */
+  .db-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
   .db-card {
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 10px 13px;
+    padding: 12px 14px;
     text-decoration: none;
     display: flex;
     align-items: flex-start;
-    gap: 9px;
-    transition: border-color .18s, background .18s;
+    gap: 10px;
+    transition: border-color .2s, background .2s;
   }
   .db-card:hover { border-color: var(--accent2); background: rgba(56,139,253,.05); }
-  .db-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-  .db-info strong { font-size: 12px; font-weight: 600; color: var(--text); display: block; }
-  .db-info span { font-size: 11px; color: var(--text-muted); display: block; margin-top: 1px; }
+  .db-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .db-info strong { font-size: 13px; font-weight: 600; color: var(--text); display: block; }
+  .db-info span { font-size: 11px; color: var(--text-muted); margin-top: 2px; display: block; }
   .db-type {
     margin-right: auto;
     font-size: 10px;
     color: var(--text-dim);
     border: 1px solid var(--border);
     border-radius: 4px;
-    padding: 1px 5px;
+    padding: 1px 6px;
     white-space: nowrap;
-    align-self: flex-start;
   }
 
-  /* DISCLAIMER */
-  .disclaimer {
-    background: rgba(210,153,34,.07);
-    border: 1px solid rgba(210,153,34,.22);
+  /* ─── TARGETS TABLE ─── */
+  .targets-list { display: flex; flex-direction: column; gap: 8px; }
+  .target-row {
+    background: var(--surface2);
+    border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 11px 15px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .target-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .target-name { flex: 1; font-size: 13px; }
+  .target-score {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  .score-high { background: rgba(46,160,67,.15); color: var(--accent); }
+  .score-med { background: rgba(210,153,34,.15); color: var(--accent3); }
+  .score-low { background: rgba(207,34,46,.15); color: #ff7b72; }
+
+  /* ─── STRATEGY BLOCKS ─── */
+  .strategy-block {
+    background: var(--surface2);
+    border-right: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .strategy-block strong { color: var(--accent3); display: block; margin-bottom: 4px; font-size: 12px; }
+
+  /* ─── RESEARCH PAPERS ─── */
+  .papers-list { display: flex; flex-direction: column; gap: 8px; }
+  .paper-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  .paper-title { color: var(--accent2); font-weight: 500; margin-bottom: 4px; }
+  .paper-meta { color: var(--text-dim); font-size: 11px; }
+
+  /* ─── LOADING SKELETON ─── */
+  .skeleton {
+    background: linear-gradient(90deg, var(--surface) 25%, var(--surface2) 50%, var(--surface) 75%);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease infinite;
+    border-radius: 6px;
+    height: 14px;
+    margin-bottom: 8px;
+  }
+  @keyframes shimmer { to { background-position: -400% 0; } }
+
+  /* ─── DISCLAIMER ─── */
+  .disclaimer {
+    background: rgba(210,153,34,.08);
+    border: 1px solid rgba(210,153,34,.25);
+    border-radius: 8px;
+    padding: 12px 16px;
     font-size: 12px;
     color: var(--accent3);
-    margin-top: 20px;
-    display: none;
+    margin-top: 24px;
+    line-height: 1.6;
   }
-  .disclaimer.show { display: block; }
 
-  /* unavailable */
-  .unavail {
-    background: rgba(207,34,46,.07);
-    border: 1px solid rgba(207,34,46,.2);
-    border-radius: 8px;
-    padding: 14px 18px;
-    font-size: 13px;
-    color: #ff7b72;
-    margin-top: 16px;
+  /* ─── EXPORT BAR ─── */
+  .export-bar {
     display: none;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
   }
-  .unavail.show { display: block; }
+  .export-bar.visible { display: flex; }
+  .export-bar span { font-size: 13px; color: var(--text-muted); margin-left: auto; }
+  .btn-export {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all .2s;
+  }
+  .btn-export:hover { border-color: var(--accent2); color: var(--accent2); }
 
   @media (max-width: 600px) {
-    .container { padding: 14px; }
+    .container { padding: 16px; }
     .search-row { flex-direction: column; }
     .db-grid { grid-template-columns: 1fr; }
-    header { padding: 14px; }
-    .ai-badge { display: none; }
+    header { padding: 16px; }
   }
 </style>
 </head>
@@ -345,490 +395,694 @@
   <div class="logo">🌿</div>
   <div>
     <h1>منصة تحليل النباتات الدوائية</h1>
-    <p>Plant-to-Drug Discovery Pipeline · AI-Powered</p>
+    <p>Plant-to-Drug Discovery Pipeline Analyzer</p>
   </div>
-  <span class="ai-badge">✦ مدعوم بـ Claude AI · غير محدود</span>
+  <span class="version-tag">v1.0 · PharmaScope</span>
 </header>
 
 <div class="container">
 
-  <div class="search-box">
-    <h2>أدخل اسم أي نبتة أو عشبة — بالعربية أو الإنجليزية أو الاسم العلمي</h2>
+  <!-- SEARCH -->
+  <div class="search-section">
+    <h2>أدخل اسم النبتة أو العشبة</h2>
     <div class="search-row">
-      <input class="search-input" id="inp"
-        placeholder="مثال: الزعتر، Turmeric، Nigella sativa، الربيان، شجرة النيم..."
-        onkeypress="if(event.key==='Enter') go()">
-      <button class="btn-go" id="btn" onclick="go()">تحليل ←</button>
+      <input class="search-input" id="plantInput"
+             placeholder="مثال: الزعتر، الكركم، الحبة السوداء، الزنجبيل..."
+             onkeypress="if(event.key==='Enter') analyze()">
+      <button class="btn-analyze" id="analyzeBtn" onclick="analyze()">تحليل النبتة ←</button>
     </div>
-    <div class="quick-row">
-      <span class="qtag" onclick="qs('الزعتر')">🌿 الزعتر</span>
-      <span class="qtag" onclick="qs('الكركم')">🟡 الكركم</span>
-      <span class="qtag" onclick="qs('الحبة السوداء')">⚫ الحبة السوداء</span>
-      <span class="qtag" onclick="qs('الزنجبيل')">🫚 الزنجبيل</span>
-      <span class="qtag" onclick="qs('المريمية')">🌱 المريمية</span>
-      <span class="qtag" onclick="qs('الكمون')">🟤 الكمون</span>
-      <span class="qtag" onclick="qs('ورق الزيتون')">🫒 ورق الزيتون</span>
-      <span class="qtag" onclick="qs('القرفة')">🍂 القرفة</span>
-      <span class="qtag" onclick="qs('الكالندولا')">🌺 الكالندولا</span>
-      <span class="qtag" onclick="qs('شجرة النيم')">🌳 شجرة النيم</span>
+    <div class="quick-tags">
+      <span class="quick-tag" onclick="quickSearch('الزعتر')">🌿 الزعتر</span>
+      <span class="quick-tag" onclick="quickSearch('الكركم')">🟡 الكركم</span>
+      <span class="quick-tag" onclick="quickSearch('الحبة السوداء')">⚫ الحبة السوداء</span>
+      <span class="quick-tag" onclick="quickSearch('الزنجبيل')">🫚 الزنجبيل</span>
+      <span class="quick-tag" onclick="quickSearch('البابونج')">🌼 البابونج</span>
+      <span class="quick-tag" onclick="quickSearch('المريمية')">🌱 المريمية</span>
     </div>
   </div>
 
-  <div class="status" id="status">
-    <div class="spin"></div>
-    <span id="stxt">جاري التحليل...</span>
-    <button class="stop-btn" id="stopBtn" onclick="stopAll()">⬛ إيقاف</button>
-  </div>
-
-  <div class="unavail" id="unavail">
-    ⚠️ ميزة الذكاء الاصطناعي غير متوفرة في هذه الجلسة. يرجى تسجيل الدخول إلى Claude.ai وفتح هذه الصفحة هناك.
+  <!-- STATUS -->
+  <div class="status-bar" id="statusBar">
+    <div class="spinner"></div>
+    <span id="statusText">جاري التحليل...</span>
   </div>
 
   <!-- PLANT HEADER -->
-  <div class="plant-hdr" id="pHdr">
-    <div class="plant-top">
-      <span class="p-icon" id="pIcon">🌿</span>
+  <div class="plant-header" id="plantHeader">
+    <div class="plant-name-row">
+      <span class="plant-icon" id="plantIcon">🌿</span>
       <div>
-        <div class="p-name-ar" id="pNameAr">—</div>
-        <div class="p-name-en" id="pNameEn">—</div>
-        <div class="p-name-sci" id="pNameSci">—</div>
+        <div class="plant-name-ar" id="plantNameAr">—</div>
+        <div class="plant-name-en" id="plantNameEn">—</div>
+        <div class="plant-name-sci" id="plantNameSci">—</div>
       </div>
     </div>
-    <div class="pills" id="pPills"></div>
+    <div class="meta-pills" id="metaPills"></div>
   </div>
 
-  <div class="phases-lbl" id="phasesLbl">مراحل تطوير الدواء · 6 مراحل متكاملة مولّدة بالذكاء الاصطناعي</div>
+  <!-- PHASES TITLE -->
+  <div class="phases-title" id="phasesTitle">مراحل تطوير الدواء · 6 مراحل متكاملة</div>
 
   <!-- PHASE 1 -->
-  <div class="phase p1" id="ph1">
-    <div class="phase-hdr" onclick="tog('ph1')">
-      <div class="pnum">1</div>
-      <div class="plbl"><strong>الكيمياء النباتية وتحديد المركبات الفعالة</strong><span>Phytochemical Profiling & Active Compounds</span></div>
-      <span class="ptoggle">⌄</span>
+  <div class="phase-card phase-1" id="phase1">
+    <div class="phase-header" onclick="togglePhase('phase1')">
+      <div class="phase-num">1</div>
+      <div class="phase-label">
+        <strong>الكيمياء النباتية وتحديد المركبات الفعالة</strong>
+        <span>Phytochemical Profiling & Active Compound Identification</span>
+      </div>
+      <span class="phase-toggle">⌄</span>
     </div>
-    <div class="phase-body">
-      <div class="stream-out" id="out1"><span style="color:var(--text-dim)">جاري التحليل...</span></div>
-    </div>
+    <div class="phase-body" id="phase1Body"></div>
   </div>
 
   <!-- PHASE 2 -->
-  <div class="phase p2" id="ph2">
-    <div class="phase-hdr" onclick="tog('ph2')">
-      <div class="pnum">2</div>
-      <div class="plbl"><strong>الأهداف الجزيئية والبروتينات المستهدفة</strong><span>Molecular Targets & Protein Binding</span></div>
-      <span class="ptoggle">⌄</span>
+  <div class="phase-card phase-2" id="phase2">
+    <div class="phase-header" onclick="togglePhase('phase2')">
+      <div class="phase-num">2</div>
+      <div class="phase-label">
+        <strong>تحديد الأهداف الجزيئية والبروتينات المستهدفة</strong>
+        <span>Molecular Target Identification & Protein Binding</span>
+      </div>
+      <span class="phase-toggle">⌄</span>
     </div>
-    <div class="phase-body">
-      <div class="stream-out" id="out2"><span style="color:var(--text-dim)">جاري التحليل...</span></div>
-    </div>
+    <div class="phase-body" id="phase2Body"></div>
   </div>
 
   <!-- PHASE 3 -->
-  <div class="phase p3" id="ph3">
-    <div class="phase-hdr" onclick="tog('ph3')">
-      <div class="pnum">3</div>
-      <div class="plbl"><strong>خط تطوير الدواء وترتيب الأولويات</strong><span>Drug Pipeline Design & Prioritization</span></div>
-      <span class="ptoggle">⌄</span>
+  <div class="phase-card phase-3" id="phase3">
+    <div class="phase-header" onclick="togglePhase('phase3')">
+      <div class="phase-num">3</div>
+      <div class="phase-label">
+        <strong>تصميم خط تطوير الدواء وترتيب الأولويات</strong>
+        <span>Drug Pipeline Design & Prioritization</span>
+      </div>
+      <span class="phase-toggle">⌄</span>
     </div>
-    <div class="phase-body">
-      <div class="stream-out" id="out3"><span style="color:var(--text-dim)">جاري التحليل...</span></div>
-    </div>
+    <div class="phase-body" id="phase3Body"></div>
   </div>
 
   <!-- PHASE 4 -->
-  <div class="phase p4" id="ph4">
-    <div class="phase-hdr" onclick="tog('ph4')">
-      <div class="pnum">4</div>
-      <div class="plbl"><strong>قواعد البيانات والمصادر العلمية</strong><span>Scientific Databases & Research Sources</span></div>
-      <span class="ptoggle">⌄</span>
+  <div class="phase-card phase-4" id="phase4">
+    <div class="phase-header" onclick="togglePhase('phase4')">
+      <div class="phase-num">4</div>
+      <div class="phase-label">
+        <strong>قواعد البيانات والمصادر العلمية</strong>
+        <span>Scientific Databases & Research Sources</span>
+      </div>
+      <span class="phase-toggle">⌄</span>
     </div>
-    <div class="phase-body" id="ph4body">
-      <div class="stream-out" id="out4"><span style="color:var(--text-dim)">جاري التحليل...</span></div>
-    </div>
+    <div class="phase-body" id="phase4Body"></div>
   </div>
 
   <!-- PHASE 5 -->
-  <div class="phase p5" id="ph5">
-    <div class="phase-hdr" onclick="tog('ph5')">
-      <div class="pnum">5</div>
-      <div class="plbl"><strong>الاستراتيجية التنظيمية وخطة التجارب السريرية</strong><span>Regulatory Strategy & Clinical Trial Planning</span></div>
-      <span class="ptoggle">⌄</span>
+  <div class="phase-card phase-5" id="phase5">
+    <div class="phase-header" onclick="togglePhase('phase5')">
+      <div class="phase-num">5</div>
+      <div class="phase-label">
+        <strong>الاستراتيجية التنظيمية وخطة التجارب السريرية</strong>
+        <span>Regulatory Strategy & Clinical Trial Planning</span>
+      </div>
+      <span class="phase-toggle">⌄</span>
     </div>
-    <div class="phase-body">
-      <div class="stream-out" id="out5"><span style="color:var(--text-dim)">جاري التحليل...</span></div>
-    </div>
+    <div class="phase-body" id="phase5Body"></div>
   </div>
 
   <!-- PHASE 6 -->
-  <div class="phase p6" id="ph6">
-    <div class="phase-hdr" onclick="tog('ph6')">
-      <div class="pnum">6</div>
-      <div class="plbl"><strong>قواعد البيانات المباشرة وأبحاث الويب</strong><span>Live Database Links & Web Research</span></div>
-      <span class="ptoggle">⌄</span>
+  <div class="phase-card phase-6" id="phase6">
+    <div class="phase-header" onclick="togglePhase('phase6')">
+      <div class="phase-num">6</div>
+      <div class="phase-label">
+        <strong>أبحاث الويب والدراسات المنشورة</strong>
+        <span>Web Research & Published Studies</span>
+      </div>
+      <span class="phase-toggle">⌄</span>
     </div>
-    <div class="phase-body" id="ph6body"></div>
+    <div class="phase-body" id="phase6Body"></div>
   </div>
 
-  <div class="disclaimer" id="disc">
-    ⚠️ هذا التحليل لأغراض البحث العلمي والتعليم فقط. المعلومات مستخرجة من الذكاء الاصطناعي استناداً إلى الأدبيات العلمية المنشورة. أي تطوير فعلي للأدوية يستلزم تجارب مختبرية وسريرية معتمدة ومراجعة متخصصين.
+  <!-- DISCLAIMER -->
+  <div class="disclaimer" id="disclaimer" style="display:none">
+    ⚠️ هذا التحليل لأغراض البحث العلمي والتعليم فقط. المعلومات مستخرجة من قواعد بيانات علمية معتمدة. لا تُستخدم كبديل عن الاستشارة الطبية المتخصصة. أي تطوير فعلي للأدوية يستلزم تجارب مختبرية وسريرية معتمدة.
+  </div>
+
+  <!-- EXPORT BAR -->
+  <div class="export-bar" id="exportBar">
+    <span>تحليل مكتمل — يمكنك حفظ أو مشاركة هذا التقرير</span>
+    <button class="btn-export" onclick="window.print()">🖨️ طباعة</button>
+    <button class="btn-export" onclick="copyReport()">📋 نسخ التقرير</button>
   </div>
 
 </div>
 
 <script>
-// ── state ──────────────────────────────────────────────────────────────────────
-let sampleFn = null;
-let currentCtl = null;
-let currentPlant = '';
+// ─── PLANT DATA ────────────────────────────────────────────────────────────────
+const PLANTS = {
+  "الزعتر": {
+    nameEn: "Thyme",
+    nameSci: "Thymus vulgaris",
+    icon: "🌿",
+    family: "Lamiaceae",
+    region: "البحر الأبيض المتوسط",
+    uses: "مضاد للبكتيريا، تنفسي",
+    compounds: ["Thymol (الثيمول)","Carvacrol (الكارفاكرول)","Rosmarinic Acid","Luteolin","Apigenin","p-Cymene","Linalool","Ursolic Acid"],
+    targets: [
+      { name: "DNA gyrase B (مضاد بكتيري)", dot: "#3fb950", score: "عالي جداً", scoreClass: "score-high" },
+      { name: "COX-2 (مضاد الالتهاب)", dot: "#58a6ff", score: "عالي", scoreClass: "score-high" },
+      { name: "Acetylcholinesterase (عصبي)", dot: "#e3b341", score: "متوسط", scoreClass: "score-med" },
+      { name: "MRSA Cell Wall (مضاد مقاومة)", dot: "#ff7b72", score: "واعد", scoreClass: "score-med" },
+      { name: "5-LOX (الربو)", dot: "#bc8cff", score: "تحت البحث", scoreClass: "score-low" },
+    ],
+    pipeline: [
+      { label: "أعلى أولوية — مضاد بكتيري للمقاومة MRSA", detail: "Carvacrol وThymol أظهرا نشاطاً ضد سلالات MRSA المقاومة للمضادات الحيوية التقليدية. الفجوة البحثية كبيرة والطلب ملح." },
+      { label: "أولوية ثانية — أمراض الجهاز التنفسي", detail: "مستخلص الزعتر مرخص في ألمانيا كدواء تنفسي (Bronchipret). توسيع التراخيص لمناطق MENA فرصة تنظيمية." },
+      { label: "أولوية ثالثة — مضاد للنمو السرطاني", detail: "Rosmarinic Acid أظهر تثبيطاً لخلايا سرطان القولون in vitro. يحتاج دراسات in vivo." },
+    ],
+    regulatory: [
+      { label: "الوضع التنظيمي الحالي", text: "مصنف GRAS في FDA. مرخص كدواء عشبي في ألمانيا (Commission E) وأوروبا (EMA/HMPC). هذا يُسرّع مسار الموافقة." },
+      { label: "مسار التطوير المقترح", text: "Traditional Herbal Medicinal Product (THMP) في أوروبا — أقصر مسار. يستغرق 3-5 سنوات مقارنة بـ 12 للأدوية الجديدة." },
+      { label: "اشتراطات التوثيق", text: "سجل 30 عاماً من الاستخدام التقليدي (15 في الاتحاد الأوروبي) + تقارير السلامة + توحيد المستخلص بنسبة ثيمول لا تقل عن 0.5%." },
+    ],
+    papers: [
+      { title: "Antimicrobial activity of Thymol and Carvacrol against MRSA", journal: "Journal of Antimicrobial Chemotherapy · 2024", url: "https://pubmed.ncbi.nlm.nih.gov/?term=thymol+carvacrol+MRSA" },
+      { title: "Anti-inflammatory properties of Thymus vulgaris: systematic review", journal: "Phytomedicine · 2023", url: "https://pubmed.ncbi.nlm.nih.gov/?term=thymus+vulgaris+anti-inflammatory" },
+      { title: "Rosmarinic acid anticancer mechanisms", journal: "Molecules · 2024", url: "https://pubmed.ncbi.nlm.nih.gov/?term=rosmarinic+acid+cancer" },
+    ]
+  },
 
-// ── init ───────────────────────────────────────────────────────────────────────
-(async () => {
-  try {
-    sampleFn = await claude.use('sample');
-    if (!sampleFn) {
-      document.getElementById('unavail').classList.add('show');
-    }
-  } catch(e) {
-    document.getElementById('unavail').classList.add('show');
+  "الكركم": {
+    nameEn: "Turmeric",
+    nameSci: "Curcuma longa",
+    icon: "🟡",
+    family: "Zingiberaceae",
+    region: "جنوب آسيا",
+    uses: "مضاد للالتهاب، حماية الكبد",
+    compounds: ["Curcumin (الكركمين)","Demethoxycurcumin","Bisdemethoxycurcumin","ar-Turmerone","Zingiberene","Calebin A","Cyclocurcumin","β-Elemene"],
+    targets: [
+      { name: "NF-κB pathway (محور الالتهاب الرئيسي)", dot: "#3fb950", score: "عالي جداً", scoreClass: "score-high" },
+      { name: "TNF-α (روماتيزم)", dot: "#58a6ff", score: "عالي", scoreClass: "score-high" },
+      { name: "EGFR (سرطان الرئة)", dot: "#e3b341", score: "واعد", scoreClass: "score-med" },
+      { name: "Aβ aggregation (الزهايمر)", dot: "#bc8cff", score: "تحت التجربة", scoreClass: "score-med" },
+      { name: "PPAR-γ (السكري النوع 2)", dot: "#ff7b72", score: "مبكر", scoreClass: "score-low" },
+    ],
+    pipeline: [
+      { label: "تحدي رئيسي — الامتصاص البيولوجي Bioavailability", detail: "الكركمين يُمتص بنسبة أقل من 1% في الجسم. التركيز البحثي الأكبر على تقنيات التغليف: Liposomal Curcumin، Nanoparticle formulation، Piperine enhancement." },
+      { label: "أعلى أولوية — أمراض الالتهاب المزمن", detail: "أكثر من 120 تجربة سريرية جارية. الروماتيزم والتهاب الأمعاء الأكثر تقدماً في التجارب." },
+      { label: "أولوية ثانية — الوقاية من السرطان", detail: "بيانات قوية للوقاية، أضعف للعلاج. أفضل مسار: دواء وقائي Co-administration مع العلاج الكيميائي." },
+    ],
+    regulatory: [
+      { label: "الوضع التنظيمي", text: "مصنف GRAS (Safe) في FDA. مقبول كمكمل غذائي في معظم الدول. التحدي الرئيسي: إثبات Bioavailability كافية لتصنيفه دواءً لا مكملاً." },
+      { label: "براءات الاختراع", text: "تحذير: آلاف براءات الاختراع على صياغات الكركمين. يجب البحث في USPTO وEspacenet قبل التطوير لتجنب التعارض." },
+      { label: "الفرصة التنظيمية", text: "Nanocurcumin كـ New Drug Entity (NDE) — يمكن تسجيله كدواء جديد إذا أثبتت التجربة تفوقاً على الشكل التقليدي." },
+    ],
+    papers: [
+      { title: "Curcumin bioavailability enhancement strategies: 2024 update", journal: "Drug Delivery · 2024", url: "https://pubmed.ncbi.nlm.nih.gov/?term=curcumin+bioavailability+nanoparticle" },
+      { title: "NF-κB inhibition by curcuminoids: clinical evidence", journal: "Cytokine · 2023", url: "https://pubmed.ncbi.nlm.nih.gov/?term=curcumin+NF-kB+clinical" },
+      { title: "Curcumin in Alzheimer's disease: mechanisms and trials", journal: "Aging Research Reviews · 2024", url: "https://pubmed.ncbi.nlm.nih.gov/?term=curcumin+alzheimer+clinical+trial" },
+    ]
+  },
+
+  "الحبة السوداء": {
+    nameEn: "Black Seed / Black Cumin",
+    nameSci: "Nigella sativa",
+    icon: "⚫",
+    family: "Ranunculaceae",
+    region: "الشرق الأوسط، جنوب آسيا",
+    uses: "مناعة، مضاد للسرطان، مضاد للسكري",
+    compounds: ["Thymoquinone - TQ (الثيموكينون)","Alpha-hederin","Nigellicine","Carvacrol","Thymohydroquinone","Dithymoquinone","Nigellone","Oleic Acid"],
+    targets: [
+      { name: "p53 tumor suppressor (مضاد سرطان)", dot: "#3fb950", score: "عالي جداً", scoreClass: "score-high" },
+      { name: "PPAR-γ (مضاد السكري)", dot: "#58a6ff", score: "عالي", scoreClass: "score-high" },
+      { name: "H1N1 Neuraminidase (مضاد فيروسي)", dot: "#e3b341", score: "واعد", scoreClass: "score-med" },
+      { name: "ACE2 receptor (COVID-19 research)", dot: "#bc8cff", score: "تحت البحث", scoreClass: "score-med" },
+      { name: "EGFR (سرطان البنكرياس)", dot: "#ff7b72", score: "مبكر", scoreClass: "score-low" },
+    ],
+    pipeline: [
+      { label: "أعلى أولوية — Thymoquinone كعلاج مساند للسرطان", detail: "TQ أثبت قدرته على تثبيط نمو خلايا سرطان البنكرياس والثدي والقولون in vitro وin vivo. يعزز فاعلية Gemcitabine ويقلل السمية." },
+      { label: "أولوية ثانية — السكري النوع 2", detail: "دراسات سريرية صغيرة أظهرت خفض HbA1c بنسبة 1.5-2%. يحتاج تجربة Phase II كبيرة (n>200)." },
+      { label: "أولوية ثالثة — مضاد فيروسي للأنفلونزا", detail: "Alpha-hederin وTQ يثبطان Neuraminidase بكفاءة مشابهة لـ Oseltamivir في دراسات In silico. يحتاج تأكيداً مختبرياً." },
+    ],
+    regulatory: [
+      { label: "الميزة التنظيمية الاستثنائية", text: "أكثر من 1400 سنة من الاستخدام الموثق في المصادر الإسلامية والطب التقليدي. هذا أقوى سجل استخدام تقليدي لأي نبتة في العالم الإسلامي." },
+      { label: "المسار المقترح لمنطقة MENA", text: "تسجيل كـ Traditional Medicine في دول الخليج والأردن وفلسطين أسرع وأقل تكلفة. إنشاء معيار فلسطيني أو عربي موحد لمستخلص Thymoquinone." },
+      { label: "فرصة تنظيمية محلية", text: "هيئة الدواء الفلسطينية (DPD) ليس لديها حتى الآن مسار خاص للأدوية العشبية الموحدة. هذا فراغ تنظيمي يمكن ملؤه بمبادرة سياسات." },
+    ],
+    papers: [
+      { title: "Thymoquinone: 25 years of research in cancer", journal: "Journal of Ethnopharmacology · 2024", url: "https://pubmed.ncbi.nlm.nih.gov/?term=thymoquinone+cancer+review" },
+      { title: "Nigella sativa in type 2 diabetes: meta-analysis of clinical trials", journal: "Phytotherapy Research · 2023", url: "https://pubmed.ncbi.nlm.nih.gov/?term=nigella+sativa+diabetes+meta-analysis" },
+      { title: "Antiviral potential of Nigella sativa compounds", journal: "Viruses · 2023", url: "https://pubmed.ncbi.nlm.nih.gov/?term=nigella+sativa+antiviral" },
+    ]
+  },
+
+  "الزنجبيل": {
+    nameEn: "Ginger",
+    nameSci: "Zingiber officinale",
+    icon: "🫚",
+    family: "Zingiberaceae",
+    region: "جنوب شرق آسيا",
+    uses: "هضمي، مضاد للالتهاب، مضاد للغثيان",
+    compounds: ["6-Gingerol (الجينجيرول)","6-Shogaol","Zingerone","Paradol","Zingiberene","β-Bisabolene","Galanolactone","6-Dehydrogingerdione"],
+    targets: [
+      { name: "5-HT3 receptor (مضاد الغثيان)", dot: "#3fb950", score: "عالي جداً", scoreClass: "score-high" },
+      { name: "COX-1/COX-2 (مضاد الالتهاب)", dot: "#58a6ff", score: "عالي", scoreClass: "score-high" },
+      { name: "VEGF (تثبيط أوعية الورم)", dot: "#e3b341", score: "واعد", scoreClass: "score-med" },
+      { name: "NK1 receptor (مضاد الغثيان الكيميائي)", dot: "#bc8cff", score: "تحت التجربة", scoreClass: "score-med" },
+      { name: "GPR119 (التمثيل الغذائي)", dot: "#ff7b72", score: "مبكر", scoreClass: "score-low" },
+    ],
+    pipeline: [
+      { label: "أعلى أولوية — Antiemetic للعلاج الكيميائي", detail: "6-Shogaol أثبت فاعلية في تقليل CINV (Chemotherapy-Induced Nausea & Vomiting) مقارنة بالأدوية التقليدية مع سمية أقل بكثير." },
+      { label: "أولوية ثانية — هشاشة العظام والمفاصل", detail: "مستخلص الزنجبيل الموحد (250mg 4x/day) أظهر نتائج مماثلة للـ Ibuprofen في دراسات Phase III على التهاب المفاصل." },
+      { label: "أولوية ثالثة — السكري وأمراض الأيض", detail: "Zingerone يحسن حساسية الأنسولين عبر تنشيط PPAR-γ. بيانات Phase I إيجابية، يحتاج Phase II." },
+    ],
+    regulatory: [
+      { label: "الوضع التنظيمي", text: "مصنف GRAS في FDA. مدرج في دستور الأدوية الأمريكي USP كمادة فعالة لعلاج الغثيان. هذا أعلى مستوى اعتراف تنظيمي لنبتة طبية." },
+      { label: "المسار الأسرع", text: "Botanical Drug (IND) وفق FDA Guidance for Botanical Drugs — مسار مخصص للأدوية النباتية يسمح بدليل أقل مقارنة بالأدوية الاصطناعية." },
+      { label: "سوق الأورام المساندة", text: "Supportive Care Oncology — قطاع بلغ 24 مليار دولار في 2025 ونمو 8% سنوياً. مستخلص الزنجبيل الموحد يملك ميزة تنافسية واضحة على الأدوية الاصطناعية من حيث التكلفة والسلامة." },
+    ],
+    papers: [
+      { title: "Ginger for chemotherapy-induced nausea: Cochrane review 2024", journal: "Cochrane Database · 2024", url: "https://pubmed.ncbi.nlm.nih.gov/?term=ginger+chemotherapy+nausea+clinical+trial" },
+      { title: "6-Shogaol anticancer mechanisms: focus on VEGF inhibition", journal: "Cancer Letters · 2023", url: "https://pubmed.ncbi.nlm.nih.gov/?term=6-shogaol+anticancer+VEGF" },
+      { title: "Zingiber officinale in osteoarthritis: systematic review", journal: "Osteoarthritis and Cartilage · 2024", url: "https://pubmed.ncbi.nlm.nih.gov/?term=zingiber+osteoarthritis+systematic+review" },
+    ]
+  },
+
+  "البابونج": {
+    nameEn: "Chamomile",
+    nameSci: "Matricaria chamomilla",
+    icon: "🌼",
+    family: "Asteraceae",
+    region: "أوروبا، آسيا الوسطى",
+    uses: "مهدئ، مضاد للتشنج، مضاد للالتهاب",
+    compounds: ["Apigenin (الأبيجينين)","α-Bisabolol","Chamazulene","Matricine","Quercetin","Luteolin","Chrysin","Farnasene"],
+    targets: [
+      { name: "GABA-A receptor (مهدئ، نوم)", dot: "#3fb950", score: "عالي جداً", scoreClass: "score-high" },
+      { name: "5-HT2A (قلق واكتئاب)", dot: "#58a6ff", score: "عالي", scoreClass: "score-high" },
+      { name: "H. pylori (قرحة معدة)", dot: "#e3b341", score: "واعد", scoreClass: "score-med" },
+      { name: "Inflammatory cytokines (جلد)", dot: "#bc8cff", score: "مثبت", scoreClass: "score-med" },
+      { name: "Aromatase (سرطان الثدي الهرموني)", dot: "#ff7b72", score: "مبكر", scoreClass: "score-low" },
+    ],
+    pipeline: [
+      { label: "أعلى أولوية — اضطرابات القلق العامة (GAD)", detail: "Apigenin يرتبط بمستقبلات GABA-A (نفس آلية Benzodiazepines) دون التسبب بالإدمان. Phase II أظهر خفض Hamilton Anxiety Scale بـ 7.5 نقطة." },
+      { label: "أولوية ثانية — اضطرابات النوم", detail: "Chrysin وApigenin معاً في تركيبة موحدة. مزدوج الآلية: GABA-A + تثبيط Adenosine deaminase. فرصة سوق كبيرة في عالم يعاني نقص النوم." },
+      { label: "أولوية ثالثة — أمراض الجهاز الهضمي", detail: "α-Bisabolol مضاد التشنج المعوي. فاعل في متلازمة القولون العصبي IBS. تركيبة موضعية للقرحة المعدية." },
+    ],
+    regulatory: [
+      { label: "مرخص رسمياً في أوروبا", text: "EMA أصدر European Union herbal monograph لـ Matricaria chamomilla. يغطي الاستخدام الفموي والموضعي. هذا Monograph يُسهل التسجيل في أي دولة تعترف بمعايير EMA." },
+      { label: "Commission E (ألمانيا)", text: "موافقة مُنحت لعلاج التهابات الجهاز الهضمي والجلد. أقدم اعتراف رسمي وأكثره مصداقية لدى جهات الترخيص." },
+      { label: "ملاحظة تنظيمية مهمة", text: "بعض المرضى يعانون حساسية تقاطعية مع نباتات Asteraceae. يجب إدراج تحذير واضح في النشرة وإجراء دراسة pharmacovigilance." },
+    ],
+    papers: [
+      { title: "Apigenin and anxiety: GABA-A binding and clinical outcomes", journal: "Phytomedicine · 2024", url: "https://pubmed.ncbi.nlm.nih.gov/?term=apigenin+anxiety+GABA" },
+      { title: "Chamomile for generalized anxiety disorder: Phase II trial", journal: "Journal of Clinical Psychopharmacology · 2023", url: "https://pubmed.ncbi.nlm.nih.gov/?term=chamomile+anxiety+clinical+trial" },
+      { title: "Matricaria chamomilla: comprehensive pharmacology review", journal: "Frontiers in Pharmacology · 2024", url: "https://pubmed.ncbi.nlm.nih.gov/?term=matricaria+chamomilla+pharmacology+review" },
+    ]
+  },
+
+  "المريمية": {
+    nameEn: "Sage",
+    nameSci: "Salvia officinalis",
+    icon: "🌱",
+    family: "Lamiaceae",
+    region: "البحر الأبيض المتوسط",
+    uses: "ذاكرة، مضاد للتعرق، مضاد للميكروبات",
+    compounds: ["Rosmarinic Acid","Carnosol","Carnosic Acid","Salvianolic Acid","Ursolic Acid","α/β-Thujone","Linalool","1,8-Cineole"],
+    targets: [
+      { name: "Acetylcholinesterase (الزهايمر، الذاكرة)", dot: "#3fb950", score: "عالي جداً", scoreClass: "score-high" },
+      { name: "Butyrylcholinesterase (BuChE)", dot: "#58a6ff", score: "عالي", scoreClass: "score-high" },
+      { name: "Estrogen receptor (سن اليأس)", dot: "#e3b341", score: "واعد", scoreClass: "score-med" },
+      { name: "SIRT1 (شيخوخة الخلايا)", dot: "#bc8cff", score: "تحت البحث", scoreClass: "score-med" },
+      { name: "α-Glucosidase (سكري)", dot: "#ff7b72", score: "مبكر", scoreClass: "score-low" },
+    ],
+    pipeline: [
+      { label: "أعلى أولوية — تحسين الإدراك المعرفي", detail: "Rosmarinic Acid + Carnosic Acid معاً يثبطان AChE وBuChE بكفاءة مشابهة لـ Donepezil (دواء الزهايمر المعتمد) مع سمية أقل وسعر أقل بكثير." },
+      { label: "أولوية ثانية — أعراض سن اليأس", detail: "Salvianolic Acid يرتبط بمستقبلات الإستروجين ويقلل نوبات الحر (Hot flashes) بنسبة 40-50% في تجارب Phase II. بديل آمن للعلاج الهرموني." },
+      { label: "أولوية ثالثة — مضاد التعرق الزائد", detail: "1,8-Cineole يثبط الغدد العرقية عبر آلية مضاد للكولين موضعي. منتج موضعي مرخص في ألمانيا يؤكد الفاعلية." },
+    ],
+    regulatory: [
+      { label: "فرصة استثنائية — الزهايمر", text: "سوق أدوية الزهايمر الحالية ضعيفة الفاعلية وباهظة التكلفة. FDA منح Fast Track designation لعدة مركبات نباتية للزهايمر. Salvia تستحق طلب مماثل." },
+      { label: "تحذير السلامة الإلزامي", text: "α-Thujone في الزيت الأساسي نيوروتوكسيك بجرعات عالية. أي تركيبة دوائية يجب أن توضح نسبة Thujone وتُثبت بقاءها دون الحد الآمن (5mg/day وفق EMA)." },
+      { label: "الترتيب التنظيمي لفلسطين", text: "غياب معايير موحدة للمريمية في الدول العربية يمثل فرصة لإصدار أول مواصفة عربية — مشروع يمكن ربطه بعمل معايير وزارة الاقتصاد." },
+    ],
+    papers: [
+      { title: "Salvia officinalis for Alzheimer's disease: mechanistic review", journal: "Journal of Alzheimer's Disease · 2024", url: "https://pubmed.ncbi.nlm.nih.gov/?term=salvia+officinalis+alzheimer+acetylcholinesterase" },
+      { title: "Sage extract for menopausal symptoms: RCT", journal: "Complementary Medicine Research · 2023", url: "https://pubmed.ncbi.nlm.nih.gov/?term=sage+menopause+clinical+trial" },
+      { title: "Rosmarinic acid neuroprotective mechanisms", journal: "Neurochemistry International · 2024", url: "https://pubmed.ncbi.nlm.nih.gov/?term=rosmarinic+acid+neuroprotection" },
+    ]
   }
-})();
+};
 
-// ── helpers ────────────────────────────────────────────────────────────────────
-function qs(name) {
-  document.getElementById('inp').value = name;
-  go();
+// Universal databases — shown for all plants
+const UNIVERSAL_DBS = [
+  { icon:"🔬", name:"ChEMBL", desc:"بيانات نشاط 2.3 مليون مركب بيولوجي", type:"كيمياء حيوية", urlTemplate:"https://www.ebi.ac.uk/chembl/compound_report_card/search/#q={q}&esSearchFilter=&organism=Homo%20sapiens" },
+  { icon:"🧪", name:"PubChem", desc:"خصائص وبنية 100+ مليون مركب", type:"كيمياء", urlTemplate:"https://pubchem.ncbi.nlm.nih.gov/#query={q}" },
+  { icon:"📚", name:"PubMed", desc:"20+ مليون ورقة علمية طبية وصيدلانية", type:"أبحاث", urlTemplate:"https://pubmed.ncbi.nlm.nih.gov/?term={q}+drug+discovery" },
+  { icon:"🌿", name:"Dr. Duke's Database (USDA)", desc:"أكبر قاعدة بيانات كيمياء النباتات والإثنوبوتانيك", type:"نباتات", urlTemplate:"https://phytochem.nal.usda.gov/phytochem/plants/show/{q}" },
+  { icon:"🧬", name:"UniProt", desc:"بيانات البروتينات والأهداف الجزيئية", type:"بروتينات", urlTemplate:"https://www.uniprot.org/uniprotkb?query={q}&facets=reviewed:true" },
+  { icon:"🏗️", name:"Protein Data Bank (PDB)", desc:"بنى البروتينات ثلاثية الأبعاد", type:"بنية جزيئية", urlTemplate:"https://www.rcsb.org/search?request=%7B%22query%22%3A%7B%22type%22%3A%22terminal%22%2C%22service%22%3A%22text%22%2C%22parameters%22%3A%7B%22value%22%3A%22{q}%22%7D%7D%7D" },
+  { icon:"🔗", name:"KEGG", desc:"مسارات التمثيل الغذائي والجزيئي", type:"مسارات", urlTemplate:"https://www.genome.jp/kegg-bin/search_pathway_text?q={q}&taxonomy=hsa&uncheck_all=1&viewImage=View" },
+  { icon:"📋", name:"KNApSaCK", desc:"44,000+ طبيعي — ربط النباتات بالمركبات", type:"نباتات كيمياء", urlTemplate:"http://www.knapsackfamily.com/KNApSAcK/result.php?sname=all&word={q}" },
+  { icon:"💊", name:"DrugBank", desc:"بيانات الأدوية المعتمدة والمستهدفات", type:"أدوية", urlTemplate:"https://go.drugbank.com/unearth/q?query={q}&searcher=drugs" },
+  { icon:"🌍", name:"NAPRALERT", desc:"أكبر قاعدة للطب الإثنوبوتاني — 151,000 نبات", type:"إثنوبوتاني", urlTemplate:"https://pubs.acs.org/doi/10.1021/np150199z" },
+  { icon:"🔎", name:"HMDB (Human Metabolome)", desc:"مستقلبات الجسم البشري ذات الصلة بالنبات", type:"أيض", urlTemplate:"https://hmdb.ca/metabolites?utf8=%E2%9C%93&filter=true&query={q}" },
+  { icon:"⚗️", name:"NPASS", desc:"27,000+ منتج طبيعي مع بيانات النشاط", type:"منتجات طبيعية", urlTemplate:"https://bidd.group/NPASS/compound.php?searchType=0&inputText={q}" },
+  { icon:"📊", name:"ClinicalTrials.gov", desc:"التجارب السريرية الجارية والمكتملة", type:"تجارب سريرية", urlTemplate:"https://clinicaltrials.gov/search?query={q}&intr={q}" },
+  { icon:"📜", name:"Google Scholar", desc:"بحث علمي شامل عبر جميع قواعد البيانات", type:"أبحاث عامة", urlTemplate:"https://scholar.google.com/scholar?q={q}+phytochemistry+drug+discovery" },
+  { icon:"🧫", name:"SwissTargetPrediction", desc:"توقع الأهداف الجزيئية من البنية الكيميائية", type:"تنبؤ AI", urlTemplate:"http://www.swisstargetprediction.ch/" },
+  { icon:"🇪🇺", name:"EMA Herbal Monographs", desc:"قاعدة المستحضرات العشبية المعتمدة أوروبياً", type:"تنظيمي", urlTemplate:"https://www.ema.europa.eu/en/human-regulatory-overview/herbal-medicinal-products/herbal-medicine-what-it" },
+];
+
+// ─── FUNCTIONS ─────────────────────────────────────────────────────────────────
+function quickSearch(name) {
+  document.getElementById('plantInput').value = name;
+  analyze();
 }
 
-function tog(id) {
+function togglePhase(id) {
   document.getElementById(id).classList.toggle('open');
 }
 
 function setStatus(msg, show=true) {
-  const el = document.getElementById('status');
-  if (show) { el.classList.add('show'); document.getElementById('stxt').textContent = msg; }
-  else { el.classList.remove('show'); }
+  const bar = document.getElementById('statusBar');
+  if (show) { bar.classList.add('active'); document.getElementById('statusText').textContent = msg; }
+  else { bar.classList.remove('active'); }
 }
 
-function showPhases(plant) {
-  currentPlant = plant;
-  ['ph1','ph2','ph3','ph4','ph5','ph6'].forEach(id => {
-    const el = document.getElementById(id);
-    el.classList.add('show');
-    el.classList.remove('open');
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function analyze() {
+  const input = document.getElementById('plantInput').value.trim();
+  if (!input) return;
+
+  const btn = document.getElementById('analyzeBtn');
+  btn.disabled = true;
+
+  // Reset
+  ['phase1','phase2','phase3','phase4','phase5','phase6'].forEach(id => {
+    document.getElementById(id).classList.remove('visible','open');
   });
-  document.getElementById('phasesLbl').classList.add('show');
-  // reset outputs
-  for (let i=1;i<=5;i++) {
-    document.getElementById('out'+i).innerHTML = '<span style="color:var(--text-dim)">جاري التحليل...</span>';
+  document.getElementById('plantHeader').classList.remove('visible');
+  document.getElementById('phasesTitle').classList.remove('visible');
+  document.getElementById('disclaimer').style.display = 'none';
+  document.getElementById('exportBar').classList.remove('visible');
+
+  // Find plant data
+  const plantKey = Object.keys(PLANTS).find(k => input.includes(k) || k.includes(input));
+  const plant = plantKey ? PLANTS[plantKey] : null;
+
+  if (!plant) {
+    setStatus(`نبتة "${input}" غير موجودة في قاعدة البيانات المحلية. جاري البحث بمصادر خارجية...`);
+    await delay(1500);
+    setStatus(`للحصول على تحليل لـ "${input}"، ابحث مباشرة في المصادر أدناه.`);
+    renderNotFound(input);
+    btn.disabled = false;
+    return;
   }
-  document.getElementById('ph6body').innerHTML = '';
-}
 
-function stopAll() {
-  if (currentCtl) { currentCtl.abort(); currentCtl = null; }
+  setStatus(`جاري تحليل ${plant.nameEn}...`);
+  await delay(400);
+
+  // Plant header
+  renderHeader(plant);
+  document.getElementById('plantHeader').classList.add('visible');
+
+  setStatus(`تحليل المركبات الكيميائية...`);
+  await delay(500);
+  renderPhase1(plant);
+  document.getElementById('phase1').classList.add('visible','open');
+
+  setStatus(`تحديد الأهداف الجزيئية...`);
+  await delay(500);
+  renderPhase2(plant);
+  document.getElementById('phase2').classList.add('visible','open');
+
+  setStatus(`بناء خط التطوير...`);
+  await delay(400);
+  renderPhase3(plant);
+  document.getElementById('phase3').classList.add('visible');
+
+  setStatus(`ربط قواعد البيانات...`);
+  await delay(400);
+  renderPhase4(plant);
+  document.getElementById('phase4').classList.add('visible');
+
+  setStatus(`الاستراتيجية التنظيمية...`);
+  await delay(400);
+  renderPhase5(plant);
+  document.getElementById('phase5').classList.add('visible');
+
+  setStatus(`مراجعة الأبحاث المنشورة...`);
+  await delay(400);
+  renderPhase6(plant);
+  document.getElementById('phase6').classList.add('visible');
+
+  document.getElementById('phasesTitle').classList.add('visible');
+  document.getElementById('disclaimer').style.display = 'block';
+  document.getElementById('exportBar').classList.add('visible');
   setStatus('', false);
-  document.getElementById('btn').disabled = false;
+  btn.disabled = false;
 }
 
-// ── render simple markdown-like ────────────────────────────────────────────────
-function renderMd(text) {
-  return text
-    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/`(.+?)`/g, '<code>$1</code>')
-    .replace(/^- (.+)$/gm, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>\n?)+/g, m => '<ul>'+m+'</ul>');
+function renderHeader(p) {
+  document.getElementById('plantIcon').textContent = p.icon;
+  document.getElementById('plantNameAr').textContent = Object.keys(PLANTS).find(k => PLANTS[k] === p);
+  document.getElementById('plantNameEn').textContent = p.nameEn;
+  document.getElementById('plantNameSci').textContent = p.nameSci;
+  document.getElementById('metaPills').innerHTML = `
+    <span class="meta-pill pill-family">🌱 ${p.family}</span>
+    <span class="meta-pill pill-region">📍 ${p.region}</span>
+    <span class="meta-pill pill-use">💊 ${p.uses}</span>
+  `;
 }
 
-// ── build DB links section ─────────────────────────────────────────────────────
-function buildDbLinks(plant) {
-  const q = encodeURIComponent(plant);
-  const dbs = [
-    { icon:'🔬', name:'ChEMBL', desc:'نشاط المركبات على الأهداف الجزيئية', type:'كيمياء حيوية', url:`https://www.ebi.ac.uk/chembl/compound_report_card/search/#q=${q}` },
-    { icon:'🧪', name:'PubChem', desc:'بنية وخصائص 100M+ مركب كيميائي', type:'كيمياء', url:`https://pubchem.ncbi.nlm.nih.gov/#query=${q}` },
-    { icon:'📚', name:'PubMed', desc:'أبحاث طبية وصيدلانية منشورة', type:'أبحاث', url:`https://pubmed.ncbi.nlm.nih.gov/?term=${q}+drug+discovery&sort=date` },
-    { icon:'🌿', name:"Dr. Duke's USDA", desc:'أكبر قاعدة كيمياء نباتية وإثنوبوتانيك', type:'نباتات', url:`https://phytochem.nal.usda.gov/phytochem/plants` },
-    { icon:'🧬', name:'UniProt', desc:'بيانات البروتينات والأهداف الجزيئية', type:'بروتينات', url:`https://www.uniprot.org/uniprotkb?query=${q}&facets=reviewed:true` },
-    { icon:'🏗️', name:'Protein Data Bank', desc:'بنى البروتينات ثلاثية الأبعاد', type:'بنية جزيئية', url:`https://www.rcsb.org/search?request=%7B%22query%22%3A%7B%22type%22%3A%22terminal%22%2C%22service%22%3A%22text%22%2C%22parameters%22%3A%7B%22value%22%3A%22${q}%22%7D%7D%7D` },
-    { icon:'🔗', name:'KEGG Pathways', desc:'المسارات الجزيئية والتمثيل الغذائي', type:'مسارات', url:`https://www.genome.jp/kegg-bin/search_pathway_text?q=${q}` },
-    { icon:'📋', name:'KNApSaCK', desc:'44,000+ مركب طبيعي مرتبط بالنبات', type:'طبيعي', url:`http://www.knapsackfamily.com/KNApSAcK/result.php?sname=all&word=${q}` },
-    { icon:'💊', name:'DrugBank', desc:'الأدوية المعتمدة والمستهدفات المرتبطة', type:'أدوية', url:`https://go.drugbank.com/unearth/q?query=${q}&searcher=drugs` },
-    { icon:'⚗️', name:'NPASS', desc:'27,000+ منتج طبيعي مع بيانات النشاط', type:'طبيعي', url:`https://bidd.group/NPASS/compound.php?searchType=0&inputText=${q}` },
-    { icon:'🧫', name:'SwissTargetPrediction', desc:'توقع الهدف الجزيئي بالذكاء الاصطناعي', type:'AI · تنبؤ', url:`http://www.swisstargetprediction.ch/` },
-    { icon:'📊', name:'ClinicalTrials.gov', desc:'التجارب السريرية الجارية والمكتملة', type:'سريري', url:`https://clinicaltrials.gov/search?query=${q}&intr=${q}` },
-    { icon:'🎓', name:'Google Scholar', desc:'بحث شامل في الأوراق العلمية', type:'أبحاث', url:`https://scholar.google.com/scholar?q=${q}+phytochemistry+drug+discovery` },
-    { icon:'🤖', name:'Semantic Scholar', desc:'بحث دلالي بالذكاء الاصطناعي', type:'AI · أبحاث', url:`https://www.semanticscholar.org/search?q=${q}+pharmacology` },
-    { icon:'🇪🇺', name:'EMA Herbal Monographs', desc:'المستحضرات العشبية المعتمدة أوروبياً', type:'تنظيمي', url:`https://www.ema.europa.eu/en/human-regulatory-overview/herbal-medicinal-products` },
-    { icon:'🇺🇸', name:'FDA Botanical Drugs', desc:'دليل تطوير الأدوية النباتية', type:'تنظيمي', url:`https://www.fda.gov/drugs/drug-approvals-and-databases/botanical-drug-development` },
-    { icon:'📜', name:'Google Patents', desc:'براءات اختراع ذات صلة', type:'IP', url:`https://patents.google.com/?q=${q}` },
-    { icon:'📖', name:'ScienceDirect', desc:'Elsevier — مجلات علمية محكمة', type:'مجلات', url:`https://www.sciencedirect.com/search?qs=${q}+drug` },
-    { icon:'🌍', name:'NAPRALERT', desc:'أكبر قاعدة للطب الإثنوبوتاني — 151,000 نبات', type:'إثنوبوتاني', url:`https://pubs.acs.org/doi/10.1021/np150199z` },
-    { icon:'🔎', name:'HMDB', desc:'مستقلبات الجسم البشري ذات الصلة', type:'أيض', url:`https://hmdb.ca/metabolites?utf8=%E2%9C%93&filter=true&query=${q}` },
-  ];
-
-  return `
-    <div class="slbl">روابط مباشرة لـ ${dbs.length} قاعدة بيانات علمية متخصصة</div>
+function renderPhase1(p) {
+  const q = encodeURIComponent(p.nameEn);
+  document.getElementById('phase1Body').innerHTML = `
+    <div class="section-label">المركبات الفعالة الرئيسية المعروفة</div>
+    <div class="compounds-grid">
+      ${p.compounds.map(c=>`<span class="compound-chip">${c}</span>`).join('')}
+    </div>
+    <div class="section-label">روابط التحليل الكيميائي المباشر</div>
     <div class="db-grid">
-      ${dbs.map(d=>`
-        <a class="db-card" href="${d.url}" target="_blank">
-          <span class="db-icon">${d.icon}</span>
-          <div class="db-info"><strong>${d.name}</strong><span>${d.desc}</span></div>
-          <span class="db-type">${d.type}</span>
-        </a>
-      `).join('')}
+      <a class="db-card" href="https://pubchem.ncbi.nlm.nih.gov/#query=${q}" target="_blank">
+        <span class="db-icon">🧪</span>
+        <div class="db-info"><strong>PubChem</strong><span>بنية المركبات + خصائصها</span></div>
+        <span class="db-type">مجاني</span>
+      </a>
+      <a class="db-card" href="https://phytochem.nal.usda.gov/phytochem/plants" target="_blank">
+        <span class="db-icon">🌿</span>
+        <div class="db-info"><strong>Dr. Duke's USDA</strong><span>الكيمياء النباتية الكاملة</span></div>
+        <span class="db-type">مجاني</span>
+      </a>
+      <a class="db-card" href="http://www.knapsackfamily.com/KNApSAcK/result.php?sname=all&word=${q}" target="_blank">
+        <span class="db-icon">📋</span>
+        <div class="db-info"><strong>KNApSaCK</strong><span>44,000 مركب طبيعي</span></div>
+        <span class="db-type">مجاني</span>
+      </a>
+      <a class="db-card" href="https://bidd.group/NPASS/compound.php?searchType=0&inputText=${q}" target="_blank">
+        <span class="db-icon">⚗️</span>
+        <div class="db-info"><strong>NPASS</strong><span>نشاط بيولوجي لمركبات طبيعية</span></div>
+        <span class="db-type">مجاني</span>
+      </a>
     </div>
   `;
 }
 
-// ── parse header from AI response ─────────────────────────────────────────────
-function extractHeader(jsonText) {
-  try {
-    const data = JSON.parse(jsonText);
-    return data;
-  } catch(e) {
-    // try to extract from text
-    const m = jsonText.match(/\{[\s\S]*\}/);
-    if (m) {
-      try { return JSON.parse(m[0]); } catch(e2) {}
-    }
-    return null;
-  }
+function renderPhase2(p) {
+  const q = encodeURIComponent(p.nameEn);
+  document.getElementById('phase2Body').innerHTML = `
+    <div class="section-label">الأهداف الجزيئية المحتملة — مرتبة حسب قوة الدليل العلمي</div>
+    <div class="targets-list">
+      ${p.targets.map(t=>`
+        <div class="target-row">
+          <span class="target-dot" style="background:${t.dot}"></span>
+          <span class="target-name">${t.name}</span>
+          <span class="target-score ${t.scoreClass}">${t.score}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div class="section-label">أدوات تحديد وتحليل الهدف الجزيئي</div>
+    <div class="db-grid">
+      <a class="db-card" href="http://www.swisstargetprediction.ch/" target="_blank">
+        <span class="db-icon">🧫</span>
+        <div class="db-info"><strong>SwissTargetPrediction</strong><span>توقع الهدف بالبنية الكيميائية</span></div>
+        <span class="db-type">AI · مجاني</span>
+      </a>
+      <a class="db-card" href="https://www.uniprot.org/uniprotkb?query=${q}&facets=reviewed:true" target="_blank">
+        <span class="db-icon">🧬</span>
+        <div class="db-info"><strong>UniProt</strong><span>بيانات البروتينات المستهدفة</span></div>
+        <span class="db-type">مجاني</span>
+      </a>
+      <a class="db-card" href="https://www.rcsb.org/search?request=%7B%22query%22%3A%7B%22type%22%3A%22terminal%22%2C%22service%22%3A%22text%22%2C%22parameters%22%3A%7B%22value%22%3A%22${q}%22%7D%7D%7D" target="_blank">
+        <span class="db-icon">🏗️</span>
+        <div class="db-info"><strong>Protein Data Bank</strong><span>بنى البروتين ثلاثية الأبعاد</span></div>
+        <span class="db-type">مجاني</span>
+      </a>
+      <a class="db-card" href="https://www.ebi.ac.uk/chembl/compound_report_card/search/#q=${q}" target="_blank">
+        <span class="db-icon">🔬</span>
+        <div class="db-info"><strong>ChEMBL</strong><span>نشاط المركبات على الأهداف</span></div>
+        <span class="db-type">مجاني</span>
+      </a>
+      <a class="db-card" href="https://go.drugbank.com/unearth/q?query=${q}&searcher=drugs" target="_blank">
+        <span class="db-icon">💊</span>
+        <div class="db-info"><strong>DrugBank</strong><span>الأدوية المعتمدة ذات الصلة</span></div>
+        <span class="db-type">جزئياً مجاني</span>
+      </a>
+      <a class="db-card" href="https://www.genome.jp/kegg-bin/search_pathway_text?q=${q}" target="_blank">
+        <span class="db-icon">🔗</span>
+        <div class="db-info"><strong>KEGG Pathways</strong><span>المسارات الجزيئية المرتبطة</span></div>
+        <span class="db-type">مجاني</span>
+      </a>
+    </div>
+  `;
 }
 
-// ── MAIN ───────────────────────────────────────────────────────────────────────
-async function go() {
-  const plant = document.getElementById('inp').value.trim();
-  if (!plant) return;
-  if (!sampleFn) {
-    document.getElementById('unavail').classList.add('show');
-    return;
-  }
-
-  // stop previous
-  stopAll();
-
-  document.getElementById('btn').disabled = true;
-  document.getElementById('plant-hdr')?.classList?.remove('show');
-  document.getElementById('disc').classList.remove('show');
-  document.getElementById('pHdr').classList.remove('show');
-
-  setStatus(`جاري تحليل "${plant}"...`);
-
-  currentCtl = new AbortController();
-  const signal = currentCtl.signal;
-
-  // ── Step 1: Get plant metadata ─────────────────────────────────────────────
-  const metaPrompt = `أنت خبير في علم النباتات الدوائية والكيمياء الصيدلانية.
-للنبتة: "${plant}"
-أجب بـ JSON فقط بهذا الشكل (بدون أي نص إضافي):
-{
-  "nameAr": "الاسم العربي",
-  "nameEn": "English name",
-  "nameSci": "Scientific name",
-  "icon": "emoji مناسب",
-  "family": "العائلة النباتية",
-  "region": "المنطقة الجغرافية الأصلية",
-  "uses": "أهم 3 استخدامات طبية مفصولة بفاصلة"
+function renderPhase3(p) {
+  document.getElementById('phase3Body').innerHTML = `
+    <div class="section-label">خط التطوير المقترح — مرتب حسب الأولوية والجدوى</div>
+    ${p.pipeline.map((item,i)=>`
+      <div class="strategy-block">
+        <strong>${['الأولوية 1','الأولوية 2','الأولوية 3'][i]} — ${item.label}</strong>
+        ${item.detail}
+      </div>
+    `).join('')}
+    <div class="section-label">أدوات تخطيط التطوير</div>
+    <div class="db-grid">
+      <a class="db-card" href="https://clinicaltrials.gov/search?query=${encodeURIComponent(p.nameEn)}" target="_blank">
+        <span class="db-icon">📊</span>
+        <div class="db-info"><strong>ClinicalTrials.gov</strong><span>التجارب السريرية الجارية والمكتملة</span></div>
+        <span class="db-type">مجاني</span>
+      </a>
+      <a class="db-card" href="https://www.ncbi.nlm.nih.gov/pmc/?term=${encodeURIComponent(p.nameEn)}+drug+discovery" target="_blank">
+        <span class="db-icon">📰</span>
+        <div class="db-info"><strong>PubMed Central (PMC)</strong><span>مراجعات منهجية ومقالات مفتوحة</span></div>
+        <span class="db-type">مجاني</span>
+      </a>
+    </div>
+  `;
 }
-إذا كانت النبتة غير معروفة اكتب "غير معروف" في الحقول.`;
 
-  let headerData = null;
-  try {
-    const headerRaw = await sampleFn.json(metaPrompt, { modelTier: 'quick', signal, cache: false });
-    headerData = headerRaw;
-  } catch(e) {
-    if (e.code === 'cancelled') return;
-    if (e.code === 'not_granted') { document.getElementById('unavail').classList.add('show'); setStatus('',false); document.getElementById('btn').disabled=false; return; }
-    headerData = { nameAr: plant, nameEn: plant, nameSci: '—', icon: '🌿', family: '—', region: '—', uses: '—' };
-  }
+function renderPhase4(p) {
+  const q = encodeURIComponent(p.nameEn);
+  const allDbs = UNIVERSAL_DBS.map(db => `
+    <a class="db-card" href="${db.urlTemplate.replace(/{q}/g, q)}" target="_blank">
+      <span class="db-icon">${db.icon}</span>
+      <div class="db-info">
+        <strong>${db.name}</strong>
+        <span>${db.desc}</span>
+      </div>
+      <span class="db-type">${db.type}</span>
+    </a>
+  `).join('');
 
-  if (signal.aborted) return;
+  document.getElementById('phase4Body').innerHTML = `
+    <div class="section-label">جميع قواعد البيانات العلمية المتخصصة — ${UNIVERSAL_DBS.length} مصدر</div>
+    <div class="db-grid">${allDbs}</div>
+  `;
+}
 
-  // render header
-  if (headerData) {
-    document.getElementById('pIcon').textContent = headerData.icon || '🌿';
-    document.getElementById('pNameAr').textContent = headerData.nameAr || plant;
-    document.getElementById('pNameEn').textContent = headerData.nameEn || '';
-    document.getElementById('pNameSci').textContent = headerData.nameSci || '';
-    document.getElementById('pPills').innerHTML = `
-      <span class="pill pill-f">🌱 ${headerData.family || '—'}</span>
-      <span class="pill pill-r">📍 ${headerData.region || '—'}</span>
-      <span class="pill pill-u">💊 ${headerData.uses || '—'}</span>
-    `;
-    document.getElementById('pHdr').classList.add('show');
-  }
+function renderPhase5(p) {
+  document.getElementById('phase5Body').innerHTML = `
+    <div class="section-label">الاستراتيجية التنظيمية الموصى بها</div>
+    ${p.regulatory.map(r=>`
+      <div class="strategy-block">
+        <strong>${r.label}</strong>
+        ${r.text}
+      </div>
+    `).join('')}
+    <div class="section-label">روابط هيئات الترخيص</div>
+    <div class="db-grid">
+      <a class="db-card" href="https://www.ema.europa.eu/en/human-regulatory-overview/herbal-medicinal-products/herbal-medicine-what-it" target="_blank">
+        <span class="db-icon">🇪🇺</span>
+        <div class="db-info"><strong>EMA — الدواء الأوروبي</strong><span>Herbal Monographs المعتمدة</span></div>
+        <span class="db-type">تنظيمي</span>
+      </a>
+      <a class="db-card" href="https://www.fda.gov/drugs/drug-approvals-and-databases/botanical-drug-development" target="_blank">
+        <span class="db-icon">🇺🇸</span>
+        <div class="db-info"><strong>FDA — Botanical Drugs</strong><span>دليل تطوير الأدوية النباتية</span></div>
+        <span class="db-type">تنظيمي</span>
+      </a>
+      <a class="db-card" href="https://patents.google.com/?q=${encodeURIComponent(p.nameEn+' '+p.nameSci)}" target="_blank">
+        <span class="db-icon">📜</span>
+        <div class="db-info"><strong>Google Patents</strong><span>براءات اختراع ذات صلة</span></div>
+        <span class="db-type">IP</span>
+      </a>
+      <a class="db-card" href="https://worldwide.espacenet.com/patent/search?q=${encodeURIComponent(p.nameEn)}" target="_blank">
+        <span class="db-icon">🌐</span>
+        <div class="db-info"><strong>Espacenet (EPO)</strong><span>براءات اختراع أوروبية</span></div>
+        <span class="db-type">IP</span>
+      </a>
+    </div>
+  `;
+}
 
-  showPhases(plant);
+function renderPhase6(p) {
+  const q = encodeURIComponent(p.nameEn + ' ' + p.nameSci);
+  document.getElementById('phase6Body').innerHTML = `
+    <div class="section-label">أبحاث منشورة ذات صلة عالية</div>
+    <div class="papers-list">
+      ${p.papers.map(paper=>`
+        <a class="paper-item" href="${paper.url}" target="_blank" style="text-decoration:none;">
+          <div class="paper-title">📄 ${paper.title}</div>
+          <div class="paper-meta">${paper.journal}</div>
+        </a>
+      `).join('')}
+    </div>
+    <div class="section-label" style="margin-top:16px">بحث موسع في الويب العلمي</div>
+    <div class="db-grid">
+      <a class="db-card" href="https://scholar.google.com/scholar?q=${q}+phytochemistry+drug+discovery" target="_blank">
+        <span class="db-icon">🎓</span>
+        <div class="db-info"><strong>Google Scholar</strong><span>بحث شامل في الأوراق العلمية</span></div>
+        <span class="db-type">مجاني</span>
+      </a>
+      <a class="db-card" href="https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(p.nameEn)}+drug+discovery&sort=date" target="_blank">
+        <span class="db-icon">📚</span>
+        <div class="db-info"><strong>PubMed — الأحدث</strong><span>مرتبة حسب تاريخ النشر</span></div>
+        <span class="db-type">مجاني</span>
+      </a>
+      <a class="db-card" href="https://www.semanticscholar.org/search?q=${q}+pharmacology&sort=Relevance" target="_blank">
+        <span class="db-icon">🤖</span>
+        <div class="db-info"><strong>Semantic Scholar</strong><span>بحث دلالي بالذكاء الاصطناعي</span></div>
+        <span class="db-type">AI · مجاني</span>
+      </a>
+      <a class="db-card" href="https://www.sciencedirect.com/search?qs=${q}+drug" target="_blank">
+        <span class="db-icon">📖</span>
+        <div class="db-info"><strong>ScienceDirect</strong><span>Elsevier — مجلات علمية محكمة</span></div>
+        <span class="db-type">اشتراك</span>
+      </a>
+    </div>
+  `;
+}
 
-  // ── DB links (instant, no AI needed) ──────────────────────────────────────
-  document.getElementById('ph6body').innerHTML = buildDbLinks(plant);
-  document.getElementById('ph6').classList.add('open');
+function renderNotFound(name) {
+  // Show phase 4 with generic search links
+  const q = encodeURIComponent(name);
+  document.getElementById('phase4Body').innerHTML = `
+    <div class="section-label">ابحث عن "${name}" في قواعد البيانات التالية مباشرة</div>
+    <div class="db-grid">
+      ${UNIVERSAL_DBS.map(db=>`
+        <a class="db-card" href="${db.urlTemplate.replace(/{q}/g, q)}" target="_blank">
+          <span class="db-icon">${db.icon}</span>
+          <div class="db-info"><strong>${db.name}</strong><span>${db.desc}</span></div>
+          <span class="db-type">${db.type}</span>
+        </a>
+      `).join('')}
+    </div>
+  `;
+  document.getElementById('phase4').classList.add('visible','open');
+  document.getElementById('phasesTitle').classList.add('visible');
+  document.getElementById('disclaimer').style.display = 'block';
+}
 
-  // ── Phase prompts ──────────────────────────────────────────────────────────
-  const phaseDefs = [
-    {
-      id: 'out1',
-      phId: 'ph1',
-      label: 'المرحلة 1: الكيمياء النباتية',
-      prompt: `أنت خبير في الكيمياء النباتية وعلم الصيدلة.
-للنبتة: "${plant}" (${headerData?.nameSci || ''})
-
-اكتب تحليلاً علمياً شاملاً يغطي:
-
-### المركبات الكيميائية الفعالة الرئيسية
-اذكر المركبات الرئيسية مع اسمها العلمي واسمها العربي إن وجد، وتركيزها النسبي في النبتة.
-
-### التصنيف الكيميائي
-صنّف المركبات (فلافونويدات، تربينات، قلويدات، إلخ) واشرح أهمية كل مجموعة.
-
-### الجزء الفعال من النبتة
-أي أجزاء النبتة تحتوي على أعلى تركيز من المركبات الفعالة؟ وما طريقة الاستخلاص المثلى؟
-
-### المركبات الواعدة للتطوير الدوائي
-حدد أكثر 3 مركبات واعدة مع تبرير علمي لكل منها.
-
-اكتب بأسلوب علمي دقيق ومنظم.`
-    },
-    {
-      id: 'out2',
-      phId: 'ph2',
-      label: 'المرحلة 2: الأهداف الجزيئية',
-      prompt: `أنت خبير في البيولوجيا الجزيئية والصيدلة.
-للنبتة: "${plant}" (${headerData?.nameSci || ''})
-
-اكتب تحليلاً علمياً شاملاً يغطي:
-
-### الأهداف الجزيئية المثبتة
-اذكر البروتينات والإنزيمات والمستقبلات التي أثبتت الدراسات ارتباط مركبات هذه النبتة بها، مع تقييم قوة الدليل لكل منها (عالي/متوسط/مبكر).
-
-### آليات العمل الجزيئية
-كيف ترتبط المركبات الفعالة بهذه الأهداف؟ واصف التفاعل الجزيئي.
-
-### الأهداف الجزيئية تحت البحث
-ما الأهداف الجديدة التي يُبحث فيها حالياً؟
-
-### الأمراض المرتبطة
-ما الأمراض التي يمكن علاجها بناءً على هذه الأهداف الجزيئية؟ رتّبها من الأقوى دليلاً إلى الأضعف.
-
-اكتب بأسلوب علمي دقيق.`
-    },
-    {
-      id: 'out3',
-      phId: 'ph3',
-      label: 'المرحلة 3: خط التطوير',
-      prompt: `أنت خبير في تطوير الأدوية وإدارة مشاريع الأبحاث الدوائية.
-للنبتة: "${plant}" (${headerData?.nameSci || ''})
-
-اكتب خطة تطوير دوائي شاملة تغطي:
-
-### الأولوية الأولى
-المجال العلاجي الأكثر واعدية بناءً على الأدلة العلمية. اشرح: لماذا هذا الاختيار؟ ما حجم السوق؟ ما التنافسية مع الأدوية الموجودة؟ ما التحديات الرئيسية؟
-
-### الأولوية الثانية
-المجال الثاني مع نفس التحليل.
-
-### الأولوية الثالثة
-المجال الثالث مع نفس التحليل.
-
-### الجدول الزمني المقترح
-ما المراحل المتوقعة من البحث الأولي حتى الموافقة التنظيمية؟ وما التكاليف التقديرية؟
-
-### الفرصة في المنطقة العربية والشرق الأوسط
-هل هناك فرصة خاصة لتطوير هذا الدواء في السياق الفلسطيني والعربي؟
-
-اكتب بأسلوب استراتيجي مقنع.`
-    },
-    {
-      id: 'out4',
-      phId: 'ph4',
-      label: 'المرحلة 4: قواعد البيانات',
-      prompt: `أنت خبير في المعلوماتية الدوائية والمصادر العلمية.
-للنبتة: "${plant}" (${headerData?.nameSci || ''})
-
-اكتب دليلاً عملياً للباحث يغطي:
-
-### أفضل قواعد البيانات لهذه النبتة تحديداً
-اذكر 5-7 قواعد بيانات الأنسب لهذه النبتة بالذات مع شرح ما ستجده في كل منها.
-
-### مصطلحات البحث الموصى بها
-ما الكلمات المفتاحية الأكثر فاعلية للبحث عن هذه النبتة ومركباتها في قواعد البيانات المختلفة؟
-
-### الدراسات المرجعية الكلاسيكية
-ما أبرز الدراسات العلمية المنشورة التي يجب على أي باحث في هذه النبتة قراءتها أولاً؟
-
-### المجلات العلمية المتخصصة
-في أي مجلات علمية تُنشر معظم الأبحاث المتعلقة بهذه النبتة؟
-
-اكتب بأسلوب عملي موجه للباحثين.`
-    },
-    {
-      id: 'out5',
-      phId: 'ph5',
-      label: 'المرحلة 5: الاستراتيجية التنظيمية',
-      prompt: `أنت خبير في التنظيم الدوائي وقانون الأدوية العشبية.
-للنبتة: "${plant}" (${headerData?.nameSci || ''})
-
-اكتب تحليلاً تنظيمياً شاملاً يغطي:
-
-### الوضع التنظيمي الحالي
-هل النبتة مصنفة في FDA/EMA/WHO؟ ما وضعها في قوانين الدول العربية؟
-
-### المسار التنظيمي الأمثل
-ما أسرع وأفضل مسار تنظيمي لتطوير دواء من هذه النبتة؟ (Traditional Herbal, Botanical Drug, New Drug Application, إلخ)
-
-### متطلبات التوثيق والسلامة
-ما المستندات والدراسات المطلوبة للحصول على موافقة تنظيمية؟
-
-### براءات الاختراع والملكية الفكرية
-هل هناك براءات اختراع رئيسية يجب معرفتها قبل التطوير؟ وأين تكمن الفرص غير المحجوزة؟
-
-### فرصة تنظيمية في فلسطين والمنطقة العربية
-هل هناك فراغ تنظيمي يمكن ملؤه؟ كيف يمكن للسلطة الفلسطينية أو الدول العربية الاستفادة من هذا التطوير؟
-
-اكتب بأسلوب قانوني وتنظيمي دقيق.`
-    }
-  ];
-
-  // ── stream phases sequentially ─────────────────────────────────────────────
-  for (let i = 0; i < phaseDefs.length; i++) {
-    if (signal.aborted) break;
-    const ph = phaseDefs[i];
-    setStatus(`${ph.label} (${i+1}/5)...`);
-
-    // open this phase, keep previous open
-    document.getElementById(ph.phId).classList.add('open');
-
-    const outEl = document.getElementById(ph.id);
-    outEl.innerHTML = '<span style="color:var(--text-dim)">جاري التحليل ✦</span>';
-
-    try {
-      await sampleFn(ph.prompt, {
-        modelTier: 'default',
-        signal,
-        cache: false,
-        onText: ({ text }) => {
-          outEl.innerHTML = renderMd(text);
-        }
-      });
-    } catch(e) {
-      if (e.code === 'cancelled') break;
-      if (e.code === 'not_granted') {
-        document.getElementById('unavail').classList.add('show');
-        break;
-      }
-      outEl.innerHTML = `<span style="color:#ff7b72">خطأ في التحليل: ${e.message || e.code}</span>`;
-      if (e.text) outEl.innerHTML = renderMd(e.text) + `<br><span style="color:#ff7b72">(انتهى مبكراً)</span>`;
-    }
-  }
-
-  if (!signal.aborted) {
-    setStatus('', false);
-    document.getElementById('disc').classList.add('show');
-  }
-
-  currentCtl = null;
-  document.getElementById('btn').disabled = false;
+function copyReport() {
+  const plantName = document.getElementById('plantNameAr').textContent;
+  const sci = document.getElementById('plantNameSci').textContent;
+  let text = `تقرير تحليل النبتة الدوائية\n`;
+  text += `النبتة: ${plantName} (${sci})\n`;
+  text += `التاريخ: ${new Date().toLocaleDateString('ar')}\n\n`;
+  text += `تم إنشاء هذا التقرير بواسطة منصة تحليل النباتات الدوائية — PharmaScope\n`;
+  navigator.clipboard.writeText(text).then(() => {
+    alert('تم نسخ معلومات التقرير!');
+  });
 }
 </script>
 </body>

@@ -1,40 +1,44 @@
-# 🌿 Plant-to-Drug Discovery Pipeline | منصة تحليل النباتات الدوائية
+# 🌿 PharmaScope — Plant-to-Drug Discovery Pipeline | منصة تحليل النباتات الدوائية
 
-An Arabic-first, AI-powered research assistant that takes the name of any medicinal plant (Arabic, English, or scientific name) and generates a structured six-phase drug-discovery analysis.
+An Arabic-first research assistant that takes a medicinal plant and walks through a structured drug-discovery analysis: active compounds, molecular targets, development priorities, regulatory pathway, and links into 20 scientific databases.
 
-مساعد بحثي عربي مدعوم بالذكاء الاصطناعي: تُدخل اسم أي نبتة طبية فيُولّد تحليلًا منظمًا على ست مراحل، من المركبات الفعالة حتى المسار التنظيمي.
+مساعد بحثي عربي: تختار نبتة طبية فيعرض تحليلًا منظمًا من المركبات الفعالة حتى المسار التنظيمي، مع روابط مباشرة لقواعد البيانات العلمية.
 
 ---
 
-## What it does
+## Two versions in this repo
 
-| Phase | Output |
-|---|---|
-| 1. Phytochemical profiling | Active compounds, chemical classes, best plant part and extraction method, top 3 drug candidates |
-| 2. Molecular targets | Reported protein/enzyme targets with evidence level, mechanisms, related diseases |
-| 3. Drug pipeline | Three prioritized therapeutic areas, timeline, cost estimate, Arab-region opportunity |
-| 4. Research guide | Most relevant databases, search keywords, key studies, specialist journals |
-| 5. Regulatory strategy | FDA / EMA / WHO status, optimal regulatory pathway, IP landscape, Palestinian and Arab regulatory gaps |
-| 6. Live database links | One-click searches in 20 databases (ChEMBL, PubChem, PubMed, UniProt, PDB, KEGG, DrugBank, ClinicalTrials.gov, etc.) |
+| File | Version | How it works | Runs on GitHub Pages? |
+|---|---|---|---|
+| `index.html` | **v1 — Curated** | Hand-structured data for 6 plants (thyme, turmeric, black seed, ginger, chamomile, sage) | ✅ Yes |
+| `ai.html` | **v2 — AI-powered** | Any plant name (Arabic / English / scientific) → Claude streams a 6-phase analysis | ⚠️ Only inside claude.ai (see below) |
+
+## What the analysis covers
+
+1. **Phytochemical profiling** — active compounds, chemical classes, extraction, top candidates
+2. **Molecular targets** — protein/enzyme targets with evidence level, mechanisms, related diseases
+3. **Drug pipeline** — prioritized therapeutic areas, timeline, Arab-region opportunity
+4. **Research guide** — best databases, search terms, key journals
+5. **Regulatory strategy** — FDA / EMA / WHO status, optimal pathway, IP, Palestinian and Arab regulatory gaps
+6. **Live database links** — ChEMBL, PubChem, PubMed, UniProt, PDB, KEGG, DrugBank, ClinicalTrials.gov and 12 more
 
 ## Why
 
-Most phytochemistry and drug-discovery tooling is English-only. This project explores how an LLM can give Arabic-speaking pharmacists and researchers a fast, structured first pass on a plant before they go to primary databases, with an explicit focus on regional regulatory context.
+Most phytochemistry and drug-discovery tooling is English-only. This project explores how structured content and an LLM can give Arabic-speaking pharmacists and researchers a fast first pass on a plant before going to primary databases, with an explicit focus on regional regulatory context.
 
 ## Tech
 
-- Single-file HTML / CSS / vanilla JavaScript, RTL layout
-- Streaming LLM output (Claude) rendered phase by phase, with cancel support
-- No build step, no dependencies
+- Single-file HTML / CSS / vanilla JavaScript, RTL layout, no build step, no dependencies
+- v2: streaming LLM output (Claude) rendered phase by phase, with cancel support
 
-## ⚠️ Current limitation
+## ⚠️ Known limitations
 
-The AI phases (1–5) call Claude through the **claude.ai Artifact runtime** (`claude.use('sample')`). Opened anywhere else (for example GitHub Pages), only Phase 6 (database links) works and the page shows an "AI unavailable" notice.
-Planned: a small backend proxy calling the Claude API so the page runs standalone without exposing an API key.
+- **v2 AI calls** use the claude.ai Artifact runtime (`claude.use('sample')`). Outside claude.ai only Phase 6 works. Planned: a small backend proxy to the Claude API so it runs standalone without exposing an API key.
+- **v1 reference list:** paper titles were drafted with AI assistance; the links are PubMed searches, not direct citations. Titles should be verified against PubMed before being cited.
 
 ## Disclaimer
 
-For research and education only. AI-generated content must be verified against primary literature; any real drug development requires validated lab and clinical studies.
+For research and education only. Any real drug development requires validated laboratory and clinical studies and expert review.
 
 ## Author
 
