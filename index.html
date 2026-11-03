@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة تحليل النباتات الدوائية — AI</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2128;
+    --border: #30363d;
+    --accent: #2ea043;
+    --accent2: #388bfd;
+    --accent3: #d29922;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --text-dim: #6e7681;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .logo {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, #2ea043, #388bfd);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  header h1 { font-size: 18px; font-weight: 600; }
+  header p { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+  .ai-badge {
+    margin-right: auto;
+    background: linear-gradient(135deg, rgba(56,139,253,.15), rgba(46,160,67,.15));
+    border: 1px solid rgba(56,139,253,.3);
+    color: var(--accent2);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: .3px;
+    white-space: nowrap;
+  }
+
+  .container { max-width: 1060px; margin: 0 auto; padding: 28px 20px; }
+
+  /* SEARCH */
+  .search-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .search-box h2 { font-size: 15px; font-weight: 600; margin-bottom: 14px; color: var(--text-muted); }
+  .search-row { display: flex; gap: 10px; }
+  .search-input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-size: 16px;
+    font-family: inherit;
+    direction: rtl;
+    transition: border-color .2s;
+  }
+  .search-input:focus { outline: none; border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(56,139,253,.1); }
+  .search-input::placeholder { color: var(--text-dim); }
+  .btn-go {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 26px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background .2s, opacity .2s;
+    white-space: nowrap;
+  }
+  .btn-go:hover { background: #3fb950; }
+  .btn-go:disabled { opacity: .45; cursor: not-allowed; }
+
+  .quick-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .qtag {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 13px;
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all .18s;
+    user-select: none;
+  }
+  .qtag:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  /* STATUS */
+  .status {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .status.show { display: flex; }
+  .spin {
+    width: 15px; height: 15px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent2);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .stop-btn {
+    margin-right: auto;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 6px;
+    padding: 3px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all .15s;
+  }
+  .stop-btn:hover { border-color: #ff7b72; color: #ff7b72; }
+
+  /* PLANT HEADER */
+  .plant-hdr {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    display: none;
+  }
+  .plant-hdr.show { display: block; }
+  .plant-top { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+  .p-icon { font-size: 42px; }
+  .p-name-ar { font-size: 26px; font-weight: 700; letter-spacing: -.4px; }
+  .p-name-en { font-size: 14px; color: var(--text-muted); }
+  .p-name-sci { font-style: italic; font-size: 13px; color: var(--accent); }
+  .pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill {
+    font-size: 12px;
+    padding: 3px 11px;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+  .pill-f { color: var(--accent2); border-color: rgba(56,139,253,.3); background: rgba(56,139,253,.07); }
+  .pill-r { color: var(--accent3); border-color: rgba(210,153,34,.3); background: rgba(210,153,34,.07); }
+  .pill-u { color: var(--accent); border-color: rgba(46,160,67,.3); background: rgba(46,160,67,.07); }
+
+  /* PHASES */
+  .phases-lbl {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    display: none;
+  }
+  .phases-lbl.show { display: block; }
+
+  .phase {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    display: none;
+  }
+  .phase.show { display: block; }
+
+  .phase-hdr {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: background .15s;
+  }
+  .phase-hdr:hover { background: rgba(255,255,255,.025); }
+
+  .pnum {
+    width: 30px; height: 30px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .p1 .pnum { background: rgba(46,160,67,.18); color: #3fb950; }
+  .p2 .pnum { background: rgba(56,139,253,.18); color: #79c0ff; }
+  .p3 .pnum { background: rgba(210,153,34,.18); color: #e3b341; }
+  .p4 .pnum { background: rgba(130,80,223,.18); color: #d2a8ff; }
+  .p5 .pnum { background: rgba(207,34,46,.18); color: #ff7b72; }
+  .p6 .pnum { background: rgba(5,80,174,.18); color: #58a6ff; }
+
+  .plbl { flex: 1; }
+  .plbl strong { font-size: 14px; font-weight: 600; }
+  .plbl span { font-size: 12px; color: var(--text-muted); display: block; margin-top: 1px; }
+  .ptoggle { color: var(--text-dim); transition: transform .2s; }
+  .phase.open .ptoggle { transform: rotate(180deg); }
+
+  .phase-body {
+    display: none;
+    padding: 4px 20px 20px;
+    border-top: 1px solid var(--border);
+  }
+  .phase.open .phase-body { display: block; }
+
+  /* CONTENT STYLES */
+  .slbl {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    margin: 18px 0 8px;
+  }
+
+  /* streaming output */
+  .stream-out {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .stream-out h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent2);
+    margin: 16px 0 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+  .stream-out ul { padding-right: 20px; margin: 6px 0; }
+  .stream-out li { margin-bottom: 4px; }
+  .stream-out strong { color: var(--accent3); }
+  .stream-out em { color: var(--accent); font-style: normal; font-weight: 500; }
+  .stream-out code {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: var(--accent2);
+  }
+
+  /* DB GRID */
+  .db-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 8px; }
+  .db-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 13px;
+    text-decoration: none;
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    transition: border-color .18s, background .18s;
+  }
+  .db-card:hover { border-color: var(--accent2); background: rgba(56,139,253,.05); }
+  .db-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .db-info strong { font-size: 12px; font-weight: 600; color: var(--text); display: block; }
+  .db-info span { font-size: 11px; color: var(--text-muted); display: block; margin-top: 1px; }
+  .db-type {
+    margin-right: auto;
+    font-size: 10px;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    white-space: nowrap;
+    align-self: flex-start;
+  }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    background: rgba(210,153,34,.07);
+    border: 1px solid rgba(210,153,34,.22);
+    border-radius: 8px;
+    padding: 11px 15px;
+    font-size: 12px;
+    color: var(--accent3);
+    margin-top: 20px;
+    display: none;
+  }
+  .disclaimer.show { display: block; }
+
+  /* unavailable */
+  .unavail {
+    background: rgba(207,34,46,.07);
+    border: 1px solid rgba(207,34,46,.2);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: #ff7b72;
+    margin-top: 16px;
+    display: none;
+  }
+  .unavail.show { display: block; }
+
+  @media (max-width: 600px) {
+    .container { padding: 14px; }
+    .search-row { flex-direction: column; }
+    .db-grid { grid-template-columns: 1fr; }
+    header { padding: 14px; }
+    .ai-badge { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🌿</div>
+  <div>
+    <h1>منصة تحليل النباتات الدوائية</h1>
+    <p>Plant-to-Drug Discovery Pipeline · AI-Powered</p>
+  </div>
+  <span class="ai-badge">✦ مدعوم بـ Claude AI · غير محدود</span>
+</header>
+
+<div class="container">
+
+  <div class="search-box">
+    <h2>أدخل اسم أي نبتة أو عشبة — بالعربية أو الإنجليزية أو الاسم العلمي</h2>
+    <div class="search-row">
+      <input class="search-input" id="inp"
+        placeholder="مثال: الزعتر، Turmeric، Nigella sativa، الربيان، شجرة النيم..."
+        onkeypress="if(event.key==='Enter') go()">
+      <button class="btn-go" id="btn" onclick="go()">تحليل ←</button>
+    </div>
+    <div class="quick-row">
+      <span class="qtag" onclick="qs('الزعتر')">🌿 الزعتر</span>
+      <span class="qtag" onclick="qs('الكركم')">🟡 الكركم</span>
+      <span class="qtag" onclick="qs('الحبة السوداء')">⚫ الحبة السوداء</span>
+      <span class="qtag" onclick="qs('الزنجبيل')">🫚 الزنجبيل</span>
+      <span class="qtag" onclick="qs('المريمية')">🌱 المريمية</span>
+      <span class="qtag" onclick="qs('الكمون')">🟤 الكمون</span>
+      <span class="qtag" onclick="qs('ورق الزيتون')">🫒 ورق الزيتون</span>
+      <span class="qtag" onclick="qs('القرفة')">🍂 القرفة</span>
+      <span class="qtag" onclick="qs('الكالندولا')">🌺 الكالندولا</span>
+      <span class="qtag" onclick="qs('شجرة النيم')">🌳 شجرة النيم</span>
+    </div>
+  </div>
+
+  <div class="status" id="status">
+    <div class="spin"></div>
+    <span id="stxt">جاري التحليل...</span>
+    <button class="stop-btn" id="stopBtn" onclick="stopAll()">⬛ إيقاف</button>
+  </div>
+
+  <div class="unavail" id="unavail">
+    ⚠️ ميزة الذكاء الاصطناعي غير متوفرة في هذه الجلسة. يرجى تسجيل الدخول إلى Claude.ai وفتح هذه الصفحة هناك.
+  </div>
+
+  <!-- PLANT HEADER -->
+  <div class="plant-hdr" id="pHdr">
+    <div class="plant-top">
+      <span class="p-icon" id="pIcon">🌿</span>
+      <div>
+        <div class="p-name-ar" id="pNameAr">—</div>
+        <div class="p-name-en" id="pNameEn">—</div>
+        <div class="p-name-sci" id="pNameSci">—</div>
+      </div>
+    </div>
+    <div class="pills" id="pPills"></div>
+  </div>
+
+  <div class="phases-lbl" id="phasesLbl">مراحل تطوير الدواء · 6 مراحل متكاملة مولّدة بالذكاء الاصطناعي</div>
+
+  <!-- PHASE 1 -->
+  <div class="phase p1" id="ph1">
+    <div class="phase-hdr" onclick="tog('ph1')">
+      <div class="pnum">1</div>
+      <div class="plbl"><strong>الكيمياء النباتية وتحديد المركبات الفعالة</strong><span>Phytochemical Profiling & Active Compounds</span></div>
+      <span class="ptoggle">⌄</span>
+    </div>
+    <div class="phase-body">
+      <div class="stream-out" id="out1"><span style="color:var(--text-dim)">جاري التحليل...</span></div>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase p2" id="ph2">
+    <div class="phase-hdr" onclick="tog('ph2')">
+      <div class="pnum">2</div>
+      <div class="plbl"><strong>الأهداف الجزيئية والبروتينات المستهدفة</strong><span>Molecular Targets & Protein Binding</span></div>
+      <span class="ptoggle">⌄</span>
+    </div>
+    <div class="phase-body">
+      <div class="stream-out" id="out2"><span style="color:var(--text-dim)">جاري التحليل...</span></div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase p3" id="ph3">
+    <div class="phase-hdr" onclick="tog('ph3')">
+      <div class="pnum">3</div>
+      <div class="plbl"><strong>خط تطوير الدواء وترتيب الأولويات</strong><span>Drug Pipeline Design & Prioritization</span></div>
+      <span class="ptoggle">⌄</span>
+    </div>
+    <div class="phase-body">
+      <div class="stream-out" id="out3"><span style="color:var(--text-dim)">جاري التحليل...</span></div>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase p4" id="ph4">
+    <div class="phase-hdr" onclick="tog('ph4')">
+      <div class="pnum">4</div>
+      <div class="plbl"><strong>قواعد البيانات والمصادر العلمية</strong><span>Scientific Databases & Research Sources</span></div>
+      <span class="ptoggle">⌄</span>
+    </div>
+    <div class="phase-body" id="ph4body">
+      <div class="stream-out" id="out4"><span style="color:var(--text-dim)">جاري التحليل...</span></div>
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase p5" id="ph5">
+    <div class="phase-hdr" onclick="tog('ph5')">
+      <div class="pnum">5</div>
+      <div class="plbl"><strong>الاستراتيجية التنظيمية وخطة التجارب السريرية</strong><span>Regulatory Strategy & Clinical Trial Planning</span></div>
+      <span class="ptoggle">⌄</span>
+    </div>
+    <div class="phase-body">
+      <div class="stream-out" id="out5"><span style="color:var(--text-dim)">جاري التحليل...</span></div>
+    </div>
+  </div>
+
+  <!-- PHASE 6 -->
+  <div class="phase p6" id="ph6">
+    <div class="phase-hdr" onclick="tog('ph6')">
+      <div class="pnum">6</div>
+      <div class="plbl"><strong>قواعد البيانات المباشرة وأبحاث الويب</strong><span>Live Database Links & Web Research</span></div>
+      <span class="ptoggle">⌄</span>
+    </div>
+    <div class="phase-body" id="ph6body"></div>
+  </div>
+
+  <div class="disclaimer" id="disc">
+    ⚠️ هذا التحليل لأغراض البحث العلمي والتعليم فقط. المعلومات مستخرجة من الذكاء الاصطناعي استناداً إلى الأدبيات العلمية المنشورة. أي تطوير فعلي للأدوية يستلزم تجارب مختبرية وسريرية معتمدة ومراجعة متخصصين.
+  </div>
+
+</div>
+
+<script>
+// ── state ──────────────────────────────────────────────────────────────────────
+let sampleFn = null;
+let currentCtl = null;
+let currentPlant = '';
+
+// ── init ───────────────────────────────────────────────────────────────────────
+(async () => {
+  try {
+    sampleFn = await claude.use('sample');
+    if (!sampleFn) {
+      document.getElementById('unavail').classList.add('show');
+    }
+  } catch(e) {
+    document.getElementById('unavail').classList.add('show');
+  }
+})();
+
+// ── helpers ────────────────────────────────────────────────────────────────────
+function qs(name) {
+  document.getElementById('inp').value = name;
+  go();
+}
+
+function tog(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function setStatus(msg, show=true) {
+  const el = document.getElementById('status');
+  if (show) { el.classList.add('show'); document.getElementById('stxt').textContent = msg; }
+  else { el.classList.remove('show'); }
+}
+
+function showPhases(plant) {
+  currentPlant = plant;
+  ['ph1','ph2','ph3','ph4','ph5','ph6'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.add('show');
+    el.classList.remove('open');
+  });
+  document.getElementById('phasesLbl').classList.add('show');
+  // reset outputs
+  for (let i=1;i<=5;i++) {
+    document.getElementById('out'+i).innerHTML = '<span style="color:var(--text-dim)">جاري التحليل...</span>';
+  }
+  document.getElementById('ph6body').innerHTML = '';
+}
+
+function stopAll() {
+  if (currentCtl) { currentCtl.abort(); currentCtl = null; }
+  setStatus('', false);
+  document.getElementById('btn').disabled = false;
+}
+
+// ── render simple markdown-like ────────────────────────────────────────────────
+function renderMd(text) {
+  return text
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/`(.+?)`/g, '<code>$1</code>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, m => '<ul>'+m+'</ul>');
+}
+
+// ── build DB links section ─────────────────────────────────────────────────────
+function buildDbLinks(plant) {
+  const q = encodeURIComponent(plant);
+  const dbs = [
+    { icon:'🔬', name:'ChEMBL', desc:'نشاط المركبات على الأهداف الجزيئية', type:'كيمياء حيوية', url:`https://www.ebi.ac.uk/chembl/compound_report_card/search/#q=${q}` },
+    { icon:'🧪', name:'PubChem', desc:'بنية وخصائص 100M+ مركب كيميائي', type:'كيمياء', url:`https://pubchem.ncbi.nlm.nih.gov/#query=${q}` },
+    { icon:'📚', name:'PubMed', desc:'أبحاث طبية وصيدلانية منشورة', type:'أبحاث', url:`https://pubmed.ncbi.nlm.nih.gov/?term=${q}+drug+discovery&sort=date` },
+    { icon:'🌿', name:"Dr. Duke's USDA", desc:'أكبر قاعدة كيمياء نباتية وإثنوبوتانيك', type:'نباتات', url:`https://phytochem.nal.usda.gov/phytochem/plants` },
+    { icon:'🧬', name:'UniProt', desc:'بيانات البروتينات والأهداف الجزيئية', type:'بروتينات', url:`https://www.uniprot.org/uniprotkb?query=${q}&facets=reviewed:true` },
+    { icon:'🏗️', name:'Protein Data Bank', desc:'بنى البروتينات ثلاثية الأبعاد', type:'بنية جزيئية', url:`https://www.rcsb.org/search?request=%7B%22query%22%3A%7B%22type%22%3A%22terminal%22%2C%22service%22%3A%22text%22%2C%22parameters%22%3A%7B%22value%22%3A%22${q}%22%7D%7D%7D` },
+    { icon:'🔗', name:'KEGG Pathways', desc:'المسارات الجزيئية والتمثيل الغذائي', type:'مسارات', url:`https://www.genome.jp/kegg-bin/search_pathway_text?q=${q}` },
+    { icon:'📋', name:'KNApSaCK', desc:'44,000+ مركب طبيعي مرتبط بالنبات', type:'طبيعي', url:`http://www.knapsackfamily.com/KNApSAcK/result.php?sname=all&word=${q}` },
+    { icon:'💊', name:'DrugBank', desc:'الأدوية المعتمدة والمستهدفات المرتبطة', type:'أدوية', url:`https://go.drugbank.com/unearth/q?query=${q}&searcher=drugs` },
+    { icon:'⚗️', name:'NPASS', desc:'27,000+ منتج طبيعي مع بيانات النشاط', type:'طبيعي', url:`https://bidd.group/NPASS/compound.php?searchType=0&inputText=${q}` },
+    { icon:'🧫', name:'SwissTargetPrediction', desc:'توقع الهدف الجزيئي بالذكاء الاصطناعي', type:'AI · تنبؤ', url:`http://www.swisstargetprediction.ch/` },
+    { icon:'📊', name:'ClinicalTrials.gov', desc:'التجارب السريرية الجارية والمكتملة', type:'سريري', url:`https://clinicaltrials.gov/search?query=${q}&intr=${q}` },
+    { icon:'🎓', name:'Google Scholar', desc:'بحث شامل في الأوراق العلمية', type:'أبحاث', url:`https://scholar.google.com/scholar?q=${q}+phytochemistry+drug+discovery` },
+    { icon:'🤖', name:'Semantic Scholar', desc:'بحث دلالي بالذكاء الاصطناعي', type:'AI · أبحاث', url:`https://www.semanticscholar.org/search?q=${q}+pharmacology` },
+    { icon:'🇪🇺', name:'EMA Herbal Monographs', desc:'المستحضرات العشبية المعتمدة أوروبياً', type:'تنظيمي', url:`https://www.ema.europa.eu/en/human-regulatory-overview/herbal-medicinal-products` },
+    { icon:'🇺🇸', name:'FDA Botanical Drugs', desc:'دليل تطوير الأدوية النباتية', type:'تنظيمي', url:`https://www.fda.gov/drugs/drug-approvals-and-databases/botanical-drug-development` },
+    { icon:'📜', name:'Google Patents', desc:'براءات اختراع ذات صلة', type:'IP', url:`https://patents.google.com/?q=${q}` },
+    { icon:'📖', name:'ScienceDirect', desc:'Elsevier — مجلات علمية محكمة', type:'مجلات', url:`https://www.sciencedirect.com/search?qs=${q}+drug` },
+    { icon:'🌍', name:'NAPRALERT', desc:'أكبر قاعدة للطب الإثنوبوتاني — 151,000 نبات', type:'إثنوبوتاني', url:`https://pubs.acs.org/doi/10.1021/np150199z` },
+    { icon:'🔎', name:'HMDB', desc:'مستقلبات الجسم البشري ذات الصلة', type:'أيض', url:`https://hmdb.ca/metabolites?utf8=%E2%9C%93&filter=true&query=${q}` },
+  ];
+
+  return `
+    <div class="slbl">روابط مباشرة لـ ${dbs.length} قاعدة بيانات علمية متخصصة</div>
+    <div class="db-grid">
+      ${dbs.map(d=>`
+        <a class="db-card" href="${d.url}" target="_blank">
+          <span class="db-icon">${d.icon}</span>
+          <div class="db-info"><strong>${d.name}</strong><span>${d.desc}</span></div>
+          <span class="db-type">${d.type}</span>
+        </a>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ── parse header from AI response ─────────────────────────────────────────────
+function extractHeader(jsonText) {
+  try {
+    const data = JSON.parse(jsonText);
+    return data;
+  } catch(e) {
+    // try to extract from text
+    const m = jsonText.match(/\{[\s\S]*\}/);
+    if (m) {
+      try { return JSON.parse(m[0]); } catch(e2) {}
+    }
+    return null;
+  }
+}
+
+// ── MAIN ───────────────────────────────────────────────────────────────────────
+async function go() {
+  const plant = document.getElementById('inp').value.trim();
+  if (!plant) return;
+  if (!sampleFn) {
+    document.getElementById('unavail').classList.add('show');
+    return;
+  }
+
+  // stop previous
+  stopAll();
+
+  document.getElementById('btn').disabled = true;
+  document.getElementById('plant-hdr')?.classList?.remove('show');
+  document.getElementById('disc').classList.remove('show');
+  document.getElementById('pHdr').classList.remove('show');
+
+  setStatus(`جاري تحليل "${plant}"...`);
+
+  currentCtl = new AbortController();
+  const signal = currentCtl.signal;
+
+  // ── Step 1: Get plant metadata ─────────────────────────────────────────────
+  const metaPrompt = `أنت خبير في علم النباتات الدوائية والكيمياء الصيدلانية.
+للنبتة: "${plant}"
+أجب بـ JSON فقط بهذا الشكل (بدون أي نص إضافي):
+{
+  "nameAr": "الاسم العربي",
+  "nameEn": "English name",
+  "nameSci": "Scientific name",
+  "icon": "emoji مناسب",
+  "family": "العائلة النباتية",
+  "region": "المنطقة الجغرافية الأصلية",
+  "uses": "أهم 3 استخدامات طبية مفصولة بفاصلة"
+}
+إذا كانت النبتة غير معروفة اكتب "غير معروف" في الحقول.`;
+
+  let headerData = null;
+  try {
+    const headerRaw = await sampleFn.json(metaPrompt, { modelTier: 'quick', signal, cache: false });
+    headerData = headerRaw;
+  } catch(e) {
+    if (e.code === 'cancelled') return;
+    if (e.code === 'not_granted') { document.getElementById('unavail').classList.add('show'); setStatus('',false); document.getElementById('btn').disabled=false; return; }
+    headerData = { nameAr: plant, nameEn: plant, nameSci: '—', icon: '🌿', family: '—', region: '—', uses: '—' };
+  }
+
+  if (signal.aborted) return;
+
+  // render header
+  if (headerData) {
+    document.getElementById('pIcon').textContent = headerData.icon || '🌿';
+    document.getElementById('pNameAr').textContent = headerData.nameAr || plant;
+    document.getElementById('pNameEn').textContent = headerData.nameEn || '';
+    document.getElementById('pNameSci').textContent = headerData.nameSci || '';
+    document.getElementById('pPills').innerHTML = `
+      <span class="pill pill-f">🌱 ${headerData.family || '—'}</span>
+      <span class="pill pill-r">📍 ${headerData.region || '—'}</span>
+      <span class="pill pill-u">💊 ${headerData.uses || '—'}</span>
+    `;
+    document.getElementById('pHdr').classList.add('show');
+  }
+
+  showPhases(plant);
+
+  // ── DB links (instant, no AI needed) ──────────────────────────────────────
+  document.getElementById('ph6body').innerHTML = buildDbLinks(plant);
+  document.getElementById('ph6').classList.add('open');
+
+  // ── Phase prompts ──────────────────────────────────────────────────────────
+  const phaseDefs = [
+    {
+      id: 'out1',
+      phId: 'ph1',
+      label: 'المرحلة 1: الكيمياء النباتية',
+      prompt: `أنت خبير في الكيمياء النباتية وعلم الصيدلة.
+للنبتة: "${plant}" (${headerData?.nameSci || ''})
+
+اكتب تحليلاً علمياً شاملاً يغطي:
+
+### المركبات الكيميائية الفعالة الرئيسية
+اذكر المركبات الرئيسية مع اسمها العلمي واسمها العربي إن وجد، وتركيزها النسبي في النبتة.
+
+### التصنيف الكيميائي
+صنّف المركبات (فلافونويدات، تربينات، قلويدات، إلخ) واشرح أهمية كل مجموعة.
+
+### الجزء الفعال من النبتة
+أي أجزاء النبتة تحتوي على أعلى تركيز من المركبات الفعالة؟ وما طريقة الاستخلاص المثلى؟
+
+### المركبات الواعدة للتطوير الدوائي
+حدد أكثر 3 مركبات واعدة مع تبرير علمي لكل منها.
+
+اكتب بأسلوب علمي دقيق ومنظم.`
+    },
+    {
+      id: 'out2',
+      phId: 'ph2',
+      label: 'المرحلة 2: الأهداف الجزيئية',
+      prompt: `أنت خبير في البيولوجيا الجزيئية والصيدلة.
+للنبتة: "${plant}" (${headerData?.nameSci || ''})
+
+اكتب تحليلاً علمياً شاملاً يغطي:
+
+### الأهداف الجزيئية المثبتة
+اذكر البروتينات والإنزيمات والمستقبلات التي أثبتت الدراسات ارتباط مركبات هذه النبتة بها، مع تقييم قوة الدليل لكل منها (عالي/متوسط/مبكر).
+
+### آليات العمل الجزيئية
+كيف ترتبط المركبات الفعالة بهذه الأهداف؟ واصف التفاعل الجزيئي.
+
+### الأهداف الجزيئية تحت البحث
+ما الأهداف الجديدة التي يُبحث فيها حالياً؟
+
+### الأمراض المرتبطة
+ما الأمراض التي يمكن علاجها بناءً على هذه الأهداف الجزيئية؟ رتّبها من الأقوى دليلاً إلى الأضعف.
+
+اكتب بأسلوب علمي دقيق.`
+    },
+    {
+      id: 'out3',
+      phId: 'ph3',
+      label: 'المرحلة 3: خط التطوير',
+      prompt: `أنت خبير في تطوير الأدوية وإدارة مشاريع الأبحاث الدوائية.
+للنبتة: "${plant}" (${headerData?.nameSci || ''})
+
+اكتب خطة تطوير دوائي شاملة تغطي:
+
+### الأولوية الأولى
+المجال العلاجي الأكثر واعدية بناءً على الأدلة العلمية. اشرح: لماذا هذا الاختيار؟ ما حجم السوق؟ ما التنافسية مع الأدوية الموجودة؟ ما التحديات الرئيسية؟
+
+### الأولوية الثانية
+المجال الثاني مع نفس التحليل.
+
+### الأولوية الثالثة
+المجال الثالث مع نفس التحليل.
+
+### الجدول الزمني المقترح
+ما المراحل المتوقعة من البحث الأولي حتى الموافقة التنظيمية؟ وما التكاليف التقديرية؟
+
+### الفرصة في المنطقة العربية والشرق الأوسط
+هل هناك فرصة خاصة لتطوير هذا الدواء في السياق الفلسطيني والعربي؟
+
+اكتب بأسلوب استراتيجي مقنع.`
+    },
+    {
+      id: 'out4',
+      phId: 'ph4',
+      label: 'المرحلة 4: قواعد البيانات',
+      prompt: `أنت خبير في المعلوماتية الدوائية والمصادر العلمية.
+للنبتة: "${plant}" (${headerData?.nameSci || ''})
+
+اكتب دليلاً عملياً للباحث يغطي:
+
+### أفضل قواعد البيانات لهذه النبتة تحديداً
+اذكر 5-7 قواعد بيانات الأنسب لهذه النبتة بالذات مع شرح ما ستجده في كل منها.
+
+### مصطلحات البحث الموصى بها
+ما الكلمات المفتاحية الأكثر فاعلية للبحث عن هذه النبتة ومركباتها في قواعد البيانات المختلفة؟
+
+### الدراسات المرجعية الكلاسيكية
+ما أبرز الدراسات العلمية المنشورة التي يجب على أي باحث في هذه النبتة قراءتها أولاً؟
+
+### المجلات العلمية المتخصصة
+في أي مجلات علمية تُنشر معظم الأبحاث المتعلقة بهذه النبتة؟
+
+اكتب بأسلوب عملي موجه للباحثين.`
+    },
+    {
+      id: 'out5',
+      phId: 'ph5',
+      label: 'المرحلة 5: الاستراتيجية التنظيمية',
+      prompt: `أنت خبير في التنظيم الدوائي وقانون الأدوية العشبية.
+للنبتة: "${plant}" (${headerData?.nameSci || ''})
+
+اكتب تحليلاً تنظيمياً شاملاً يغطي:
+
+### الوضع التنظيمي الحالي
+هل النبتة مصنفة في FDA/EMA/WHO؟ ما وضعها في قوانين الدول العربية؟
+
+### المسار التنظيمي الأمثل
+ما أسرع وأفضل مسار تنظيمي لتطوير دواء من هذه النبتة؟ (Traditional Herbal, Botanical Drug, New Drug Application, إلخ)
+
+### متطلبات التوثيق والسلامة
+ما المستندات والدراسات المطلوبة للحصول على موافقة تنظيمية؟
+
+### براءات الاختراع والملكية الفكرية
+هل هناك براءات اختراع رئيسية يجب معرفتها قبل التطوير؟ وأين تكمن الفرص غير المحجوزة؟
+
+### فرصة تنظيمية في فلسطين والمنطقة العربية
+هل هناك فراغ تنظيمي يمكن ملؤه؟ كيف يمكن للسلطة الفلسطينية أو الدول العربية الاستفادة من هذا التطوير؟
+
+اكتب بأسلوب قانوني وتنظيمي دقيق.`
+    }
+  ];
+
+  // ── stream phases sequentially ─────────────────────────────────────────────
+  for (let i = 0; i < phaseDefs.length; i++) {
+    if (signal.aborted) break;
+    const ph = phaseDefs[i];
+    setStatus(`${ph.label} (${i+1}/5)...`);
+
+    // open this phase, keep previous open
+    document.getElementById(ph.phId).classList.add('open');
+
+    const outEl = document.getElementById(ph.id);
+    outEl.innerHTML = '<span style="color:var(--text-dim)">جاري التحليل ✦</span>';
+
+    try {
+      await sampleFn(ph.prompt, {
+        modelTier: 'default',
+        signal,
+        cache: false,
+        onText: ({ text }) => {
+          outEl.innerHTML = renderMd(text);
+        }
+      });
+    } catch(e) {
+      if (e.code === 'cancelled') break;
+      if (e.code === 'not_granted') {
+        document.getElementById('unavail').classList.add('show');
+        break;
+      }
+      outEl.innerHTML = `<span style="color:#ff7b72">خطأ في التحليل: ${e.message || e.code}</span>`;
+      if (e.text) outEl.innerHTML = renderMd(e.text) + `<br><span style="color:#ff7b72">(انتهى مبكراً)</span>`;
+    }
+  }
+
+  if (!signal.aborted) {
+    setStatus('', false);
+    document.getElementById('disc').classList.add('show');
+  }
+
+  currentCtl = null;
+  document.getElementById('btn').disabled = false;
+}
+</script>
+</body>
+</html>
