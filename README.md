@@ -34,7 +34,7 @@ Most phytochemistry and drug-discovery tooling is English-only. This project exp
 ## ⚠️ Known limitations
 
 - **v2 AI calls** use the claude.ai Artifact runtime (`claude.use('sample')`). Outside claude.ai only Phase 6 works. Planned: a small backend proxy to the Claude API so it runs standalone without exposing an API key.
-- **v1 reference list:** paper titles were drafted with AI assistance; the links are PubMed searches, not direct citations. Titles should be verified against PubMed before being cited.
+- **v1 research topics:** the Phase 6 list links to PubMed *searches* on each topic, not to specific papers. No journal or year is attributed; results should be read and cited from PubMed directly.
 
 ## Disclaimer
 
